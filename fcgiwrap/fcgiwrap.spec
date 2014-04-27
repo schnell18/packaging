@@ -1,14 +1,14 @@
-Name:		fcgiwrap
-Version:	1.1.0
-Release:	1%{?dist}
-Summary:	Simple FastCGI wrapper for CGI scripts
-Group:		System Environment/Daemons
-License:	BSD-like
-URL:		http://nginx.localdomain.pl/wiki/FcgiWrap
-Source0:	https://github.com/gnosek/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
+Name:           fcgiwrap
+Version:        1.1.0
+Release:        1%{?dist}
+Summary:        Simple FastCGI wrapper for CGI scripts
+Group:          System Environment/Daemons
+License:        BSD-like
+URL:            http://nginx.localdomain.pl/wiki/FcgiWrap
+Source0:        https://github.com/gnosek/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 Patch0:         Makefile.in.patch
-BuildRequires:	autoconf automake fcgi-devel pkgconfig systemd-devel
-Requires:	fcgi
+BuildRequires:  autoconf automake fcgi-devel pkgconfig systemd-devel
+Requires:       fcgi
 
 
 %description
