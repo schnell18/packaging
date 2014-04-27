@@ -1,14 +1,3 @@
-%define systemd_test_str %(
-if [[ -z $(pkg-config --print-errors libsystemd-daemon 2>&1) ]]; then
-  echo "yes"
-else
-  echo "no"
-fi
-)
-%if "%{systemd_test_str}" == "yes"
-    %define with_systemd 1
-%endif
-
 Name:		fcgiwrap
 Version:	1.1.0
 Release:	1%{?dist}
@@ -18,8 +7,7 @@ License:	BSD-like
 URL:		http://nginx.localdomain.pl/wiki/FcgiWrap
 Source0:	https://github.com/gnosek/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 Patch0:         Makefile.in.patch
-BuildRequires:	autoconf automake fcgi-devel pkgconfig
-%{?with_systemd:BuildRequires:  systemd-devel systemd}
+BuildRequires:	autoconf automake fcgi-devel pkgconfig systemd-devel
 Requires:	fcgi
 
 
@@ -61,32 +49,25 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %{_sbindir}/fcgiwrap
 %{_mandir}/man8/*
-%{?with_systemd:
-    %{_unitdir}/*.service
-    %{_unitdir}/*.socket
-}
+%{_unitdir}/*.service
+%{_unitdir}/*.socket
 
 
 %post
 # enable socket activation for fcgiwrap
-if [[ -z $(pkg-config --print-errors libsystemd-daemon 2>&1) ]]; then
-    /usr/bin/systemctl enable fcgiwrap.socket
-    /usr/bin/systemctl start fcgiwrap.socket
-
-    cat <<BANNER
+/usr/bin/systemctl enable fcgiwrap.socket
+/usr/bin/systemctl start fcgiwrap.socket
+cat <<BANNER
 ==================================================
 FCGI service fcgiwrap is ready!!!
 ==================================================
 BANNER
-fi
 
 
 %preun
 # stop and disable socket activation for fcgiwrap
-if [[ -z $(pkg-config --print-errors libsystemd-daemon 2>&1) ]]; then
-    /usr/bin/systemctl stop fcgiwrap.socket
-    /usr/bin/systemctl disable fcgiwrap.socket
-fi
+/usr/bin/systemctl stop fcgiwrap.socket
+/usr/bin/systemctl disable fcgiwrap.socket
 
 
 %changelog
