@@ -1,0 +1,15 @@
+diff --git a/systemd/fcgiwrap.service b/systemd/fcgiwrap.service
+index 7b010c9..be7fdf3 100644
+--- a/systemd/fcgiwrap.service
++++ b/systemd/fcgiwrap.service
+@@ -4,8 +4,8 @@ After=nss-user-lookup.target
+ 
+ [Service]
+ ExecStart=/usr/sbin/fcgiwrap
+-User=http
+-Group=http
++User=nobody
++Group=nobody
+ 
+ [Install]
+ Also=fcgiwrap.socket

@@ -7,6 +7,7 @@ License:        BSD-like
 URL:            http://nginx.localdomain.pl/wiki/FcgiWrap
 Source0:        https://github.com/gnosek/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 Patch0:         Makefile.in.patch
+Patch1:         fcgiwrap.service.patch
 BuildRequires:  autoconf automake fcgi-devel pkgconfig systemd-devel
 Requires:       fcgi
 
@@ -29,6 +30,7 @@ following features:
 %prep
 %setup -q
 %patch0 -p1 -b .orig
+%patch1 -p1 -b .orig
 
 %build
 autoreconf -i
@@ -56,12 +58,6 @@ rm -rf %{buildroot}
 %post
 # enable socket activation for fcgiwrap
 /usr/bin/systemctl enable fcgiwrap.socket
-/usr/bin/systemctl start fcgiwrap.socket
-cat <<BANNER
-==================================================
-FCGI service fcgiwrap is ready!!!
-==================================================
-BANNER
 
 
 %preun
