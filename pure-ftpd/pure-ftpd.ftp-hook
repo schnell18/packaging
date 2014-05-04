@@ -1,0 +1,11 @@
+#!/usr/bin/perl -w
+# This is dummy hook script which is called when a file is uploaded
+# successfully. Link this file to actual hook script.
+
+use strict;
+
+my $ftp_file_path   = $ARGV[0];
+my $ftp_file_size   = $ENV{UPLOAD_SIZE};
+my $ftp_user        = $ENV{UPLOAD_VUSER};
+
+exit(0);

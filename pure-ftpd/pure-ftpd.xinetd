@@ -1,0 +1,17 @@
+# default: off
+# description: pure-ftpd server, xinetd version. \
+# Don't run the standalone version if you run \
+# this and remember do set "Daemonize" to "no" \
+# in /etc/pure-ftpd/pure-ftpd.conf
+service ftp
+{
+	disable	= yes
+	socket_type		= stream
+	wait			= no
+	user			= root
+	server			= /usr/sbin/pure-config.pl
+	server_args		= /etc/pure-ftpd/pure-ftpd.conf
+	log_on_success		+= DURATION USERID
+	log_on_failure		+= USERID
+	nice			= 10
+}
