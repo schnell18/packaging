@@ -131,10 +131,13 @@ install -p -m 755 configuration-file/pure-config.py $RPM_BUILD_ROOT%{_sbindir}
 install -p -m 644 pureftpd-ldap.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 install -p -m 644 pureftpd-mysql.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 install -p -m 644 pureftpd-pgsql.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
-# install customized pure-fptd.conf w/ upload script enabled
-install -p -m 644 %{SOURCE8} %{buildroot}/%{_sysconfdir}/%{name}/%{name}-ftpd.conf
-# install dummy FTP hook script
-install -p -m 755 %{SOURCE9} $RPM_BUILD_ROOT%{_bindir}/pure-fptd-hook
+# install customized pure-ftpd.conf w/ upload script enabled
+install -p -m 644 %{SOURCE8} %{buildroot}/%{_sysconfdir}/%{name}/%{name}.conf
+# install dummy FTP hook script and create symlink to it
+install -p -m 755 %{SOURCE9} $RPM_BUILD_ROOT%{_bindir}/pure-ftpd-dummy-hook
+cd $RPM_BUILD_ROOT%{_bindir}
+ln -sf pure-ftpd-dummy-hook pure-ftpd-hook
+cd -
 
 # Man
 install -p -m 644 man/pure-ftpd.8 $RPM_BUILD_ROOT%{_mandir}/man8
@@ -192,6 +195,12 @@ if [ ! -f %{_sysconfdir}/pki/%{name}/%{name}.pem ]; then
     %{_sysconfdir}/pki/%{name}/%{name}.pem
 fi
 %endif
+cat <<EOF
+============================================================
+Please symlink /usr/bin/pure-ftpd-hook to your actual hook!
+============================================================
+EOF
+
 
 %preun
 if [ "$1" -lt "1" ]; then

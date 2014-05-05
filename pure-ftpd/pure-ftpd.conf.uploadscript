@@ -230,7 +230,7 @@ AntiWarez                   yes
 # File creation mask. <umask for files>:<umask for dirs> .
 # 177:077 if you feel paranoid.
 
-Umask                       133:022
+Umask                       113:002
 
 
 

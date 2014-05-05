@@ -27,7 +27,7 @@ pureftpwho=/usr/sbin/pure-ftpwho
 pure_config=/etc/pure-ftpd/pure-ftpd.conf
 pure_launch_script=/usr/sbin/pure-config.pl
 pure_upload_script=/usr/sbin/pure-uploadscript
-pu_script=/usr/bin/pure-fptd-hook
+pu_script=/usr/bin/pure-ftpd-hook
 
 start() {
     echo -n $"Starting $prog: "
