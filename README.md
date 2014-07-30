@@ -11,3 +11,4 @@ RPM spec catalog
 * gitolite3: repack to remove the SVN dependency and use 'git' as hosting user
 * pure-fptd: repack to enable upload script and use upstream version 1.0.36
 * ngix:      repack to enable LDAP authentication via nginx-auth-ldap
+* activemq:  repack activemq 5.10.0
