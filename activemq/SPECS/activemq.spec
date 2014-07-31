@@ -1,11 +1,11 @@
-%define amqhome /usr/share/activemq
-%define amqhome_rd usr/share/activemq
+%define amqhome %{_prefix}/activemq
 %define os_user  activemq
 %define os_group activemq
 
+# do NOT repack jars
+%define __jar_repack %{nil}
 # work around build id note absence issue
 %undefine _missing_build_ids_terminate_build
-%define __jar_repack %{nil}
 
 Name: apache-activemq
 Version: 5.10.0
@@ -18,7 +18,11 @@ Source0: http://www.apache.org/dist/activemq/%{name}/%{version}/%{name}-%{versio
 Patch0: activemq-rpm.patch
 
 %description
-ActiveMQ Messaging Broker.
+Apache ActiveMQ ™ is the most popular and powerful open source messaging and
+Integration Patterns server. Apache ActiveMQ is fast, supports many Cross
+Language Clients and Protocols, comes with easy to use Enterprise Integration
+Patterns and many advanced features while fully supporting JMS 1.1 and J2EE
+1.4. Apache ActiveMQ is released under the Apache 2.0 License.
 
 
 %package client
@@ -68,6 +72,7 @@ pushd %{buildroot}%{amqhome}
     rm -fr bin/linux-x86-64 
     rm -fr bin/macosx
     # Fix up permissions (rpmlint complains)
+    find lib -perm 755 -type f -exec chmod -x '{}' \;
     find webapps -perm 755 -type f -exec chmod -x '{}' \;
     find examples/stomp/ruby -name \*.rb -type f -exec chmod +x '{}' \;
 popd
@@ -80,16 +85,22 @@ popd
 
 # create activemq client binary symlinks in /usr/bin, thanks to
 pushd %{buildroot}/usr/bin
-    ln -s ../../%{amqhome_rd}/bin/activemq-admin activemq-admin
-    ln -s ../../%{amqhome_rd}/bin/activemq activemq
+    rd=`echo %{amqhome} | cut -c2-`
+    ln -s ../../$rd/bin/activemq-admin activemq-admin
+    ln -s ../../$rd/bin/activemq activemq
 popd
 
 mv %{buildroot}%{amqhome}/activemq-all-%{version}.jar %{buildroot}%{_javadir}
 pushd %{buildroot}%{_javadir}
     for jar in *-%{version}*
     do
-        ln -sf ${jar} `echo $jar|sed "s|-%{version}||g"`
+        ln -sf $jar `echo $jar|sed "s|-%{version}||g"`
     done
+popd
+
+# remove the empty activemq.log
+pushd %{buildroot}%{amqhome}/data
+    [ -f activemq.log ] && rm -f activemq.log
 popd
 
 
@@ -101,6 +112,7 @@ rm -rf %{buildroot}
 # Add the "activemq" user and group
 getent group %{os_group} > /dev/null || /usr/sbin/groupadd -g 92 -r %{os_group} 2> /dev/null || :
 getent passwd %{os_user} > /dev/null || /usr/sbin/useradd -c "Apache ActiveMQ" -u 92 -g %{os_group} -s /bin/bash -r -d /var/lib/activemq %{os_user} 2>/dev/null || :
+
 
 %post
 [ -f /etc/init.d/activemq ] && /sbin/chkconfig --add activemq

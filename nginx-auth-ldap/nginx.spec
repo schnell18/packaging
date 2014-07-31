@@ -63,6 +63,8 @@ License: 2-clause BSD-like license
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: zlib-devel
 BuildRequires: pcre-devel
+# required by nginx ldap integration
+BuildRequires: openldap-devel
 
 Provides: webserver
 
