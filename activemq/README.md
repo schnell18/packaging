@@ -30,19 +30,21 @@ sample commands to accomplish this goal:
 Then you download the the spec file and patch from this page or clone
 this repository to your computer. You copy the SOURCES/activemq-rpm.patch 
 to the ~/rpmbuild/SOURCES directory. And copy the SPECS/activemq.spec to
-~/rpmbuild/SPECS.
+~/rpmbuild/SPECS. The patch is only tested ok with ActiveMQ 5.10.0. It
+might work with 5.9.x as well.
 
 After you complete above steps, the directory layout under ~/rpmbuild
 looks like this:
-~/rpmbuild
-├── BUILD
-├── RPMS
-├── SRPMS
-├── SOURCES
-│   ├── activemq-rpm.patch
-│   └── apache-activemq-5.10.0-bin.tar.gz
-└── SPECS
-    └── activemq.spec
+
+    ~/rpmbuild
+    ├── BUILD
+    ├── RPMS
+    ├── SRPMS
+    ├── SOURCES
+    │   ├── activemq-rpm.patch
+    │   └── apache-activemq-5.10.0-bin.tar.gz
+    └── SPECS
+        └── activemq.spec
 
 ## Run the rpmbuild
 You are now ready to kick off the build. You follow these command to
@@ -54,3 +56,18 @@ initiate the build:
 After the build is completed, you can find the result rpm under
 ~/rpmbuild/RPMS/i686 (on 32 bit OS) or ~/rpmbuild/RPMS/x86\_64 (on 64
 bit OS).
+
+
+# spec file changes
+This spec file is based [tischda][1] and refactor to support build on
+both 32 and 64 bit machines. Major changes are:
+- Use %ifarch to support 32 and 64 bit architectures
+- Install to /usr/activemq instead of /usr/share/activemq
+- Move data directory to /var/lib/activemq/data
+- Make /var/lib/activemq home direcotry of user activemq
+- Enhance post-install scriptlet
+- Cleaner code
+
+[1]: https://github.com/tischda/almira-rpm/tree/master/packages/apache-activemq
+
+
