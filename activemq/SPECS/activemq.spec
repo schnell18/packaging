@@ -1,4 +1,11 @@
 %define amqhome /usr/share/activemq
+%define amqhome_rd usr/share/activemq
+%define os_user  activemq
+%define os_group activemq
+
+# work around build id note absence issue
+%undefine _missing_build_ids_terminate_build
+%define __jar_repack %{nil}
 
 Name: apache-activemq
 Version: 5.10.0
@@ -8,10 +15,7 @@ Group: System Environment/Daemons
 License: ASL 2.0
 URL: http://activemq.apache.org/
 Source0: http://www.apache.org/dist/activemq/%{name}/%{version}/%{name}-%{version}-bin.tar.gz
-Patch0: activemq.patch
-Patch1: wrapper.conf.patch
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildArch: x86_64
+Patch0: activemq-rpm.patch
 
 %description
 ActiveMQ Messaging Broker.
@@ -28,70 +32,78 @@ Client jar for Apache ActiveMQ.
 %prep
 %setup -q -n %{name}-%{version}
 %patch0 -p1
-%patch1 -p1
 
 
 %build
 
 
 %install
-rm -rf $RPM_BUILD_ROOT
-mkdir -p $RPM_BUILD_ROOT/etc/init.d
-mkdir -p $RPM_BUILD_ROOT/var/run/activemq
+rm -rf %{buildroot}
 
-mkdir -p $RPM_BUILD_ROOT%{amqhome}
-mv * $RPM_BUILD_ROOT%{amqhome}
+install -d %{buildroot}%{_javadir}
+install -d %{buildroot}%{amqhome}
+install -d %{buildroot}/usr/bin
+install -d %{buildroot}/etc/activemq
+install -d %{buildroot}/etc/init.d
+install -d %{buildroot}/var/run/activemq
+install -d %{buildroot}/var/lib/activemq/data
 
-mkdir -p $RPM_BUILD_ROOT/usr/bin
-pushd $RPM_BUILD_ROOT/usr/bin
-    ln -s %{amqhome}/bin/activemq-admin activemq-admin
-    ln -s %{amqhome}/bin/activemq activemq
+mv * %{buildroot}%{amqhome}
+
+# move arch-specific wrapper binaries to parent directory
+pushd %{buildroot}%{amqhome}
+    %ifarch i386 i686
+        mv bin/linux-x86-32/wrapper bin
+        mv bin/linux-x86-32/libwrapper.so bin
+        mv bin/linux-x86-32/activemq %{buildroot}/etc/init.d
+        mv bin/linux-x86-32/wrapper.conf %{buildroot}/etc/activemq
+    %endif
+    %ifarch x86_64
+        mv bin/linux-x86-64/wrapper bin
+        mv bin/linux-x86-64/libwrapper.so bin
+        mv bin/linux-x86-64/activemq %{buildroot}/etc/init.d
+        mv bin/linux-x86-64/wrapper.conf %{buildroot}/etc/activemq
+    %endif
+    rm -fr bin/linux-x86-32 
+    rm -fr bin/linux-x86-64 
+    rm -fr bin/macosx
+    # Fix up permissions (rpmlint complains)
+    find webapps -perm 755 -type f -exec chmod -x '{}' \;
+    find examples/stomp/ruby -name \*.rb -type f -exec chmod +x '{}' \;
 popd
 
-mv $RPM_BUILD_ROOT%{amqhome}/conf $RPM_BUILD_ROOT/etc/activemq
-pushd $RPM_BUILD_ROOT%{amqhome}
-    ln -s /etc/activemq conf
+# move all conf/* except README to /etc/activemq
+# http://stackoverflow.com/questions/670460/move-all-files-except-one
+pushd %{buildroot}%{amqhome}/conf
+    ls -1 | grep -v ^README | xargs -I{} mv {} %{buildroot}/etc/activemq
 popd
 
-mkdir -p $RPM_BUILD_ROOT/var/lib/activemq/data
-# this shuld be blank - it comes with an empty logfile
-rm -rf $RPM_BUILD_ROOT/%{amqhome}/data
-pushd $RPM_BUILD_ROOT%{amqhome}
-    ln -s /var/lib/activemq/data data
+# create activemq client binary symlinks in /usr/bin, thanks to
+pushd %{buildroot}/usr/bin
+    ln -s ../../%{amqhome_rd}/bin/activemq-admin activemq-admin
+    ln -s ../../%{amqhome_rd}/bin/activemq activemq
 popd
 
-mkdir -p $RPM_BUILD_ROOT%{_javadir}
-mv $RPM_BUILD_ROOT%{amqhome}/activemq-all-%{version}.jar \
-    $RPM_BUILD_ROOT%{_javadir}/activemq-all-%{version}.jar
-(cd %{buildroot}%{_javadir} && for jar in *-%{version}*; do ln -sf ${jar} `echo $jar| sed "s|-%{version}||g"`; done)
-
-# Fix up binaries
-mv $RPM_BUILD_ROOT%{amqhome}/bin/linux-x86-64/wrapper.conf $RPM_BUILD_ROOT/etc/activemq
-mv $RPM_BUILD_ROOT%{amqhome}/bin/linux-x86-64/activemq $RPM_BUILD_ROOT/etc/init.d
-mv $RPM_BUILD_ROOT%{amqhome}/bin/linux-x86-64/libwrapper.so $RPM_BUILD_ROOT%{amqhome}/bin
-mv $RPM_BUILD_ROOT%{amqhome}/bin/linux-x86-64/wrapper $RPM_BUILD_ROOT%{amqhome}/bin
-rm -rf $RPM_BUILD_ROOT%{amqhome}/bin/linux-x86-32
-rm -rf $RPM_BUILD_ROOT%{amqhome}/bin/linux-x86-64
-rm -rf $RPM_BUILD_ROOT%{amqhome}/bin/macosx
-
-# Fix up permissions (rpmlint complains)
-find $RPM_BUILD_ROOT%{amqhome}/webapps -perm 755 -type f -exec chmod -x '{}' \;
-find $RPM_BUILD_ROOT%{amqhome}/examples/stomp/ruby -name \*.rb -type f -exec chmod +x '{}' \;
+mv %{buildroot}%{amqhome}/activemq-all-%{version}.jar %{buildroot}%{_javadir}
+pushd %{buildroot}%{_javadir}
+    for jar in *-%{version}*
+    do
+        ln -sf ${jar} `echo $jar|sed "s|-%{version}||g"`
+    done
+popd
 
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 
 %pre
 # Add the "activemq" user and group
-# we need a shell to be able to use su - later
-getent group activemq > /dev/null || /usr/sbin/groupadd -g 92 -r activemq 2> /dev/null || :
-getent passwd activemq > /dev/null || /usr/sbin/useradd -c "Apache ActiveMQ" -u 92 -g activemq -s /bin/bash -r -d /usr/share/activemq activemq 2>/dev/null || :
-
+getent group %{os_group} > /dev/null || /usr/sbin/groupadd -g 92 -r %{os_group} 2> /dev/null || :
+getent passwd %{os_user} > /dev/null || /usr/sbin/useradd -c "Apache ActiveMQ" -u 92 -g %{os_group} -s /bin/bash -r -d /var/lib/activemq %{os_user} 2>/dev/null || :
 
 %post
-/sbin/chkconfig --add activemq
+[ -f /etc/init.d/activemq ] && /sbin/chkconfig --add activemq
 
 
 %preun
@@ -107,8 +119,8 @@ fi
 %attr(0755,root,root) /etc/init.d/activemq
 %attr(0755,root,root) /usr/bin/activemq
 %attr(0755,root,root) /usr/bin/activemq-admin
-%attr(755,activemq,activemq) %dir /var/run/activemq
-%attr(755,activemq,activemq) /var/lib/activemq
+%attr(755,%{os_user}, %{os_group}) %dir /var/run/activemq
+%attr(755,%{os_user}, %{os_group}) /var/lib/activemq
 %{amqhome}
 
 
@@ -118,40 +130,5 @@ fi
 
 
 %changelog
-* Fri Oct 25 2013 Daniel Tischer <dos.7182@gmail.com> - 5.9.0-3
-- rebuild for 5.9.0
-- updated wrapper.conf 5.8.0 -> 5.9.0
-
-* Sun May 12 2013 Daniel Tischer <dos.7182@gmail.com> - 5.8.0-1
-- rebuild for 5.8.0
-- removed dependency on jre to support oracle jdk
-- removed options for snapshots and 32 bit
-- reset package name to its default
-- named patches after the files they modify
-
-* Thu Dec 20 2012 Zhigang Wang <w1z2g3@gmail.com> - 5.7.0-1
-- rebuild for 5.7.0
-
-* Thu Jan 06 2011 James Casey <james.casey@cern.ch> - 5.4.2-1
-- rebuild for 5.4.2
-
-* Sun Nov 07 2010 James Casey <jamesc.000@gmail.com> - 5.4.1-1
-- rebuild for 5.4.1
-
-* Tue May 18 2010 James Casey <james.casey@cern.ch> - 5.4-1
-- rebuild for 5.4
-
-* Tue May 18 2010 James Casey <james.casey@cern.ch> - 5.3.2-3
-- Fix bug where /var/lib/activemq/data would not be installed
-
-* Tue May 18 2010 James Casey <james.casey@cern.ch> - 5.3.2-2
-- Rename package to activemq from apache-activemq
-- Integrated comments from Marc Schöchlin
-- moved /var/cache/activemq to /var/lib/activemq
-- added dependency on java
-- Fixed file permissions (executable bit set on many files)
-- Fixed rpmlint errors
-- move platform dependant binaries to /usr/lib
-
-* Fri May 07 2010 James Casey <james.casey@cern.ch> - 5.3.2-1
-- First version of specfile
+* Thu Jul 31 2014 Justin Zhang <dos.7182@gmail.com> - 5.10.0-1
+- refactor for 5.10.0
