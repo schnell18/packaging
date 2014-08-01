@@ -49,6 +49,7 @@ install -d %{buildroot}%{amqhome}
 install -d %{buildroot}/usr/bin
 install -d %{buildroot}/etc/activemq
 install -d %{buildroot}/etc/init.d
+install -d %{buildroot}/var/log/activemq
 install -d %{buildroot}/var/run/activemq
 install -d %{buildroot}/var/lib/activemq/data
 
@@ -77,10 +78,10 @@ pushd %{buildroot}%{amqhome}
     find examples/stomp/ruby -name \*.rb -type f -exec chmod +x '{}' \;
 popd
 
-# move all conf/* except README to /etc/activemq
+# move all conf/* except DIRECTORY_MOVED to /etc/activemq
 # http://stackoverflow.com/questions/670460/move-all-files-except-one
 pushd %{buildroot}%{amqhome}/conf
-    ls -1 | grep -v ^README | xargs -I{} mv {} %{buildroot}/etc/activemq
+    ls -1 | grep -v ^DIRECTORY_MOVED | xargs -I{} mv {} %{buildroot}/etc/activemq
 popd
 
 # create activemq client binary symlinks in /usr/bin, thanks to
@@ -131,6 +132,7 @@ fi
 %attr(0755,root,root) /etc/init.d/activemq
 %attr(0755,root,root) /usr/bin/activemq
 %attr(0755,root,root) /usr/bin/activemq-admin
+%attr(755,%{os_user}, %{os_group}) %dir /var/log/activemq
 %attr(755,%{os_user}, %{os_group}) %dir /var/run/activemq
 %attr(755,%{os_user}, %{os_group}) /var/lib/activemq
 %{amqhome}

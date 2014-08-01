@@ -1,27 +1,27 @@
-diff -u -rN apache-activemq-5.10.0/bin/linux-x86-32/activemq apache-activemq-5.10.0-rpm/bin/linux-x86-32/activemq
+diff -urN apache-activemq-5.10.0/bin/linux-x86-32/activemq apache-activemq-5.10.0-rpm/bin/linux-x86-32/activemq
 --- apache-activemq-5.10.0/bin/linux-x86-32/activemq	2014-06-05 15:35:43.000000000 +0200
-+++ apache-activemq-5.10.0-rpm/bin/linux-x86-32/activemq	2014-07-31 09:24:07.463339195 +0200
++++ apache-activemq-5.10.0-rpm/bin/linux-x86-32/activemq	2014-08-01 05:16:41.336890825 +0200
 @@ -30,18 +30,18 @@
  # Application
  APP_NAME="ActiveMQ"
  APP_LONG_NAME="ActiveMQ Broker"
 -ACTIVEMQ_HOME="../.."
 +ACTIVEMQ_HOME="/usr/activemq"
- 
+
  # Wrapper
 -WRAPPER_CMD="wrapper"
 -WRAPPER_CONF="wrapper.conf"
 +WRAPPER_CMD="/usr/activemq/bin/wrapper"
 +WRAPPER_CONF="/etc/activemq/wrapper.conf"
- 
+
  # Priority at which to run the wrapper.  See "man nice" for valid priorities.
  #  nice is only used if a priority is specified.
  PRIORITY=
- 
+
  # Location of the pid file.
 -PIDDIR="."
 +PIDDIR="/var/run/activemq"
- 
+
  # If uncommented, causes the Wrapper to be shutdown using an anchor file.
  #  When launched with the 'start' command, it will also ignore all INT and
 @@ -56,7 +56,7 @@
@@ -30,22 +30,22 @@ diff -u -rN apache-activemq-5.10.0/bin/linux-x86-32/activemq apache-activemq-5.1
  #  port needs to be allocated prior to the user being changed.
 -#RUN_AS_USER=
 +RUN_AS_USER=activemq
- 
+
  # The following two lines are used by the chkconfig command. Change as is
  #  appropriate for your application.  They should remain commented.
 @@ -551,4 +551,4 @@
          ;;
  esac
- 
+
 -exit 0
 \ No newline at end of file
 +exit 0
-diff -u -rN apache-activemq-5.10.0/bin/linux-x86-32/wrapper.conf apache-activemq-5.10.0-rpm/bin/linux-x86-32/wrapper.conf
+diff -urN apache-activemq-5.10.0/bin/linux-x86-32/wrapper.conf apache-activemq-5.10.0-rpm/bin/linux-x86-32/wrapper.conf
 --- apache-activemq-5.10.0/bin/linux-x86-32/wrapper.conf	2014-06-05 15:35:43.000000000 +0200
-+++ apache-activemq-5.10.0-rpm/bin/linux-x86-32/wrapper.conf	2014-07-31 09:43:56.502566120 +0200
++++ apache-activemq-5.10.0-rpm/bin/linux-x86-32/wrapper.conf	2014-08-01 05:10:54.164391407 +0200
 @@ -20,11 +20,11 @@
  #********************************************************************
- 
+
  #wrapper.debug=TRUE
 -set.default.ACTIVEMQ_HOME=../..
 -set.default.ACTIVEMQ_BASE=../..
@@ -57,16 +57,16 @@ diff -u -rN apache-activemq-5.10.0/bin/linux-x86-32/wrapper.conf apache-activemq
 +set.default.ACTIVEMQ_CONF=/etc/activemq
 +set.default.ACTIVEMQ_DATA=/var/lib/activemq/data
 +wrapper.working.dir=/var/lib/activemq
- 
+
  # Java Application
  wrapper.java.command=java
 @@ -41,7 +41,7 @@
  wrapper.java.classpath.2=%ACTIVEMQ_HOME%/bin/activemq.jar
- 
+
  # Java Library Path (location of Wrapper.DLL or libwrapper.so)
 -wrapper.java.library.path.1=%ACTIVEMQ_HOME%/bin/linux-x86-32/
 +wrapper.java.library.path.1=%ACTIVEMQ_HOME%/bin/
- 
+
  # Java Additional Parameters
  # note that n is the parameter number starting from 1.
 @@ -57,6 +57,9 @@
@@ -74,42 +74,51 @@ diff -u -rN apache-activemq-5.10.0/bin/linux-x86-32/wrapper.conf apache-activemq
  wrapper.java.additional.11=-Dactivemq.data=%ACTIVEMQ_DATA%
  wrapper.java.additional.12=-Djava.security.auth.login.config=%ACTIVEMQ_CONF%/login.config
 +wrapper.java.additional.13=-Dhawtio.realm=activemq
-+wrapper.java.additional.14=-Dhawtio.role=admins
-+wrapper.java.additional.15=-Dhawtio.rolePrincipalClasses=org.apache.activemq.jaas.
- 
++wrapper.java.additional.14=-Dhawtio.role=admin
++wrapper.java.additional.15=-Dhawtio.rolePrincipalClasses=org.apache.activemq.jaas.GroupPrincipal
+
  # Uncomment to enable jmx
  #wrapper.java.additional.n=-Dcom.sun.management.jmxremote.port=1616
+@@ -90,7 +93,7 @@
+ wrapper.console.loglevel=INFO
+
+ # Log file to use for wrapper output logging.
+-wrapper.logfile=%ACTIVEMQ_DATA%/wrapper.log
++wrapper.logfile=/var/log/activemq/wrapper.log
+
+ # Format of output for the log file.  (See docs for formats)
+ wrapper.logfile.format=LPTM
 @@ -141,4 +144,4 @@
  wrapper.ntservice.starttype=AUTO_START
- 
+
  # Allow the service to interact with the desktop.
 -wrapper.ntservice.interactive=false
 \ No newline at end of file
 +wrapper.ntservice.interactive=false
-diff -u -rN apache-activemq-5.10.0/bin/linux-x86-64/activemq apache-activemq-5.10.0-rpm/bin/linux-x86-64/activemq
+diff -urN apache-activemq-5.10.0/bin/linux-x86-64/activemq apache-activemq-5.10.0-rpm/bin/linux-x86-64/activemq
 --- apache-activemq-5.10.0/bin/linux-x86-64/activemq	2014-06-05 15:35:43.000000000 +0200
-+++ apache-activemq-5.10.0-rpm/bin/linux-x86-64/activemq	2014-07-31 09:34:17.832589978 +0200
++++ apache-activemq-5.10.0-rpm/bin/linux-x86-64/activemq	2014-08-01 05:17:05.237835320 +0200
 @@ -30,18 +30,18 @@
  # Application
  APP_NAME="ActiveMQ"
  APP_LONG_NAME="ActiveMQ Broker"
 -ACTIVEMQ_HOME="../.."
 +ACTIVEMQ_HOME="/usr/activemq"
- 
+
  # Wrapper
 -WRAPPER_CMD="wrapper"
 -WRAPPER_CONF="wrapper.conf"
 +WRAPPER_CMD="/usr/activemq/bin/wrapper"
 +WRAPPER_CONF="/etc/activemq/wrapper.conf"
- 
+
  # Priority at which to run the wrapper.  See "man nice" for valid priorities.
  #  nice is only used if a priority is specified.
  PRIORITY=
- 
+
  # Location of the pid file.
 -PIDDIR="."
 +PIDDIR="/var/run/activemq"
- 
+
  # If uncommented, causes the Wrapper to be shutdown using an anchor file.
  #  When launched with the 'start' command, it will also ignore all INT and
 @@ -56,7 +56,7 @@
@@ -118,22 +127,22 @@ diff -u -rN apache-activemq-5.10.0/bin/linux-x86-64/activemq apache-activemq-5.1
  #  port needs to be allocated prior to the user being changed.
 -#RUN_AS_USER=
 +RUN_AS_USER=activemq
- 
+
  # The following two lines are used by the chkconfig command. Change as is
  #  appropriate for your application.  They should remain commented.
 @@ -551,4 +551,4 @@
          ;;
  esac
- 
+
 -exit 0
 \ No newline at end of file
 +exit 0
-diff -u -rN apache-activemq-5.10.0/bin/linux-x86-64/wrapper.conf apache-activemq-5.10.0-rpm/bin/linux-x86-64/wrapper.conf
+diff -urN apache-activemq-5.10.0/bin/linux-x86-64/wrapper.conf apache-activemq-5.10.0-rpm/bin/linux-x86-64/wrapper.conf
 --- apache-activemq-5.10.0/bin/linux-x86-64/wrapper.conf	2014-06-05 15:35:43.000000000 +0200
-+++ apache-activemq-5.10.0-rpm/bin/linux-x86-64/wrapper.conf	2014-07-31 09:45:06.613566043 +0200
++++ apache-activemq-5.10.0-rpm/bin/linux-x86-64/wrapper.conf	2014-08-01 05:13:08.753652377 +0200
 @@ -20,11 +20,11 @@
  #********************************************************************
- 
+
  #wrapper.debug=TRUE
 -set.default.ACTIVEMQ_HOME=../..
 -set.default.ACTIVEMQ_BASE=../..
@@ -145,16 +154,16 @@ diff -u -rN apache-activemq-5.10.0/bin/linux-x86-64/wrapper.conf apache-activemq
 +set.default.ACTIVEMQ_CONF=/etc/activemq
 +set.default.ACTIVEMQ_DATA=/var/lib/activemq/data
 +wrapper.working.dir=/var/lib/activemq
- 
+
  # Java Application
  wrapper.java.command=java
 @@ -41,7 +41,7 @@
  wrapper.java.classpath.2=%ACTIVEMQ_HOME%/bin/activemq.jar
- 
+
  # Java Library Path (location of Wrapper.DLL or libwrapper.so)
 -wrapper.java.library.path.1=%ACTIVEMQ_HOME%/bin/linux-x86-64/
 +wrapper.java.library.path.1=%ACTIVEMQ_HOME%/bin/
- 
+
  # Java Additional Parameters
  # note that n is the parameter number starting from 1.
 @@ -57,6 +57,9 @@
@@ -162,25 +171,59 @@ diff -u -rN apache-activemq-5.10.0/bin/linux-x86-64/wrapper.conf apache-activemq
  wrapper.java.additional.11=-Dactivemq.data=%ACTIVEMQ_DATA%
  wrapper.java.additional.12=-Djava.security.auth.login.config=%ACTIVEMQ_CONF%/login.config
 +wrapper.java.additional.13=-Dhawtio.realm=activemq
-+wrapper.java.additional.14=-Dhawtio.role=admins
-+wrapper.java.additional.15=-Dhawtio.rolePrincipalClasses=org.apache.activemq.jaas.
- 
++wrapper.java.additional.14=-Dhawtio.role=admin
++wrapper.java.additional.15=-Dhawtio.rolePrincipalClasses=org.apache.activemq.jaas.GroupPrincipal
+
  # Uncomment to enable jmx
  #wrapper.java.additional.n=-Dcom.sun.management.jmxremote.port=1616
+@@ -90,7 +93,7 @@
+ wrapper.console.loglevel=INFO
+
+ # Log file to use for wrapper output logging.
+-wrapper.logfile=%ACTIVEMQ_DATA%/wrapper.log
++wrapper.logfile=/var/log/activemq/wrapper.log
+
+ # Format of output for the log file.  (See docs for formats)
+ wrapper.logfile.format=LPTM
 @@ -141,4 +144,4 @@
  wrapper.ntservice.starttype=AUTO_START
- 
+
  # Allow the service to interact with the desktop.
 -wrapper.ntservice.interactive=false
 \ No newline at end of file
 +wrapper.ntservice.interactive=false
-diff -u -rN apache-activemq-5.10.0/conf/README apache-activemq-5.10.0-rpm/conf/README
---- apache-activemq-5.10.0/conf/README	1970-01-01 01:00:00.000000000 +0100
-+++ apache-activemq-5.10.0-rpm/conf/README	2014-07-31 09:46:35.769565946 +0200
+diff -urN apache-activemq-5.10.0/conf/DIRECTORY_MOVED apache-activemq-5.10.0-rpm/conf/DIRECTORY_MOVED
+--- apache-activemq-5.10.0/conf/DIRECTORY_MOVED	1970-01-01 01:00:00.000000000 +0100
++++ apache-activemq-5.10.0-rpm/conf/DIRECTORY_MOVED	2014-07-31 09:46:35.769565946 +0200
 @@ -0,0 +1 @@
 +This directory has been moved to /etc/activemq.
-diff -u -rN apache-activemq-5.10.0/data/README apache-activemq-5.10.0-rpm/data/README
---- apache-activemq-5.10.0/data/README	1970-01-01 01:00:00.000000000 +0100
-+++ apache-activemq-5.10.0-rpm/data/README	2014-07-31 09:47:03.136565913 +0200
+diff -urN apache-activemq-5.10.0/conf/log4j.properties apache-activemq-5.10.0-rpm/conf/log4j.properties
+--- apache-activemq-5.10.0/conf/log4j.properties	2014-06-05 15:35:43.000000000 +0200
++++ apache-activemq-5.10.0-rpm/conf/log4j.properties	2014-08-01 05:07:55.099903952 +0200
+@@ -44,7 +44,7 @@
+
+ # File appender
+ log4j.appender.logfile=org.apache.log4j.RollingFileAppender
+-log4j.appender.logfile.file=${activemq.base}/data/activemq.log
++log4j.appender.logfile.file=/var/log/activemq/activemq.log
+ log4j.appender.logfile.maxFileSize=1024KB
+ log4j.appender.logfile.maxBackupIndex=5
+ log4j.appender.logfile.append=true
+@@ -70,9 +70,9 @@
+ log4j.logger.org.apache.activemq.audit=INFO, audit
+
+ log4j.appender.audit=org.apache.log4j.RollingFileAppender
+-log4j.appender.audit.file=${activemq.base}/data/audit.log
++log4j.appender.audit.file=/var/log/activemq/audit.log
+ log4j.appender.audit.maxFileSize=1024KB
+ log4j.appender.audit.maxBackupIndex=5
+ log4j.appender.audit.append=true
+ log4j.appender.audit.layout=org.apache.log4j.PatternLayout
+-log4j.appender.audit.layout.ConversionPattern=%-5p | %m | %t%n
+\ No newline at end of file
++log4j.appender.audit.layout.ConversionPattern=%-5p | %m | %t%n
+diff -urN apache-activemq-5.10.0/data/DIRECTORY_MOVED apache-activemq-5.10.0-rpm/data/DIRECTORY_MOVED
+--- apache-activemq-5.10.0/data/DIRECTORY_MOVED	1970-01-01 01:00:00.000000000 +0100
++++ apache-activemq-5.10.0-rpm/data/DIRECTORY_MOVED	2014-07-31 09:47:03.136565913 +0200
 @@ -0,0 +1 @@
 +This directory has been moved to /var/lib/activemq/data.
