@@ -128,13 +128,13 @@ fi
 
 %files
 %defattr(-,root,root,-)
-%config(noreplace) %attr(644,root,root) /etc/activemq/*
 %attr(0755,root,root) /etc/init.d/activemq
 %attr(0755,root,root) /usr/bin/activemq
 %attr(0755,root,root) /usr/bin/activemq-admin
-%attr(755,%{os_user}, %{os_group}) %dir /var/log/activemq
-%attr(755,%{os_user}, %{os_group}) %dir /var/run/activemq
-%attr(755,%{os_user}, %{os_group}) /var/lib/activemq
+%config(noreplace) %attr(644,%{os_user},%{os_group}) /etc/activemq/*
+%attr(755,%{os_user},%{os_group}) %dir /var/log/activemq
+%attr(755,%{os_user},%{os_group}) %dir /var/run/activemq
+%attr(755,%{os_user},%{os_group}) /var/lib/activemq
 %{amqhome}
 
 

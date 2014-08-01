@@ -58,7 +58,7 @@ After the build is completed, you can find the result rpm under
 bit OS).
 
 
-# spec file changes
+# Change log of spec file
 This spec file is based [tischda][1] and refactored to make activemq
 follow common Linux convention and to support build on both 32 and 64
 bit machines. Major changes are:
@@ -67,12 +67,13 @@ bit machines. Major changes are:
 - Move data directory to /var/lib/activemq/data
 - Move logs to /var/log/activemq
 - Make /var/lib/activemq home direcotry of user activemq
+- Make activemq owner of /etc/activemq/\* files
 - Enhance post-install scriptlet
 - Cleaner code
 
 # Issues resolved
 ## Issue 1: rpmbuild fails on build id note absence
-### symptom
+### Symptom
 The rpmbuild of the [original spec file][1] emits error message like: 
 
     extracting debug info from /home/justin/rpmbuild/BUILDROOT/apache-activemq-5.10.0-1.el6.i386/usr/share/activemq/bin/linux-x86-32/wrapper
@@ -81,11 +82,11 @@ The rpmbuild of the [original spec file][1] emits error message like:
 
 And the build fails.
 
-### cause
+### Cause
 The wrapper binary shipped by Apache does not have build id note. However,
 the rpmbuild mandates the build id and fails the build on absence.
 
-### resolution
+### Resolution
 The fix is set the "_missing_build_ids_terminate_build" which was
 introduced in this [ticket][2] like this:
 
@@ -106,7 +107,7 @@ but it does not work as the command to extract debug info is defined as:
 even if the _missing_build_ids_terminate_build is zero the expression
 %?{_missing_build_ids_terminate_build} still evaluates to true
 
-### tips
+### Tips
 Running "rpm --showrc" displays all macro definitions, which is a great
 aid to diagnose the rpmbuild errors.
 
@@ -114,12 +115,12 @@ aid to diagnose the rpmbuild errors.
 ### symptom
 brp-java-repack-jars takes too long to complete
 
-### cause
+### Cause
 Running this program is inherently slow according to [this blog][3].
 There is no negative impact if the jar repack is not perform so long as
 the jars have no jni DSO and are not compiled using GCJ.
 
-### resolution
+### Resolution
 Re-define the following marco in the spec to disable jar repack:
 
     %define __jar_repack %{nil}
