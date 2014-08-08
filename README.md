@@ -12,3 +12,4 @@ RPM spec catalog
 * pure-fptd: repack to enable upload script and use upstream version 1.0.36
 * ngix:      repack to enable LDAP authentication via nginx-auth-ldap
 * activemq:  repack activemq 5.10.0
+* git:       repack git 2.0.4(fedora 21), fix circular dependencies

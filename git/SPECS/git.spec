@@ -92,7 +92,6 @@ Requires:       less
 Requires:       openssh-clients
 Requires:       perl(Error)
 Requires:       perl(Term::ReadKey)
-Requires:       perl-Git = %{version}-%{release}
 Requires:       rsync
 Requires:       zlib >= 1.2
 
@@ -103,6 +102,11 @@ Obsoletes:      git-core <= 1.5.4.3
 
 # Obsolete git-arch
 Obsoletes:      git-arch < %{version}-%{release}
+
+%filter_from_requires /^perl(Git)/d
+%filter_from_requires /^perl(packed-refs)/d
+%filter_setup
+
 
 %description
 Git is a fast, scalable, distributed revision control system with an
