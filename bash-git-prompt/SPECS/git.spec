@@ -44,7 +44,7 @@
 
 Name:           git
 Version:        2.0.4
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        Fast Version Control System
 License:        GPLv2
 Group:          Development/Tools
@@ -512,7 +512,7 @@ rm -f {Documentation/technical,contrib/emacs,contrib/credential/gnome-keyring}/.
 chmod a-x Documentation/technical/api-index.sh
 find contrib -type f | xargs chmod -x
 
-install -pm 644 %{SOURCE20} %{buildroot}%{_sysconfdir}/gitconfig
+install -pm 644 %{Source20} %{buildroot}%{_sysconfdir}/gitconfig
 
 %clean
 rm -rf %{buildroot}
@@ -535,7 +535,7 @@ rm -rf %{buildroot}
 %{!?_without_docs: %doc Documentation/*.html Documentation/docbook-xsl.css}
 %{!?_without_docs: %doc Documentation/howto Documentation/technical}
 %{_sysconfdir}/bash_completion.d
-%config %{_sysconfdir}/gitconfig
+%{_sysconfdir}/gitconfig
 
 %files bzr
 %defattr(-,root,root)
@@ -640,10 +640,6 @@ rm -rf %{buildroot}
 # No files for you!
 
 %changelog
-* Fri Aug 08 2014 Justin Zhang <fgz@qad.com> - 2.0.4-2
-- Resolve circular dependency
-- Add default system wide git config
-
 * Thu Jul 31 2014 Ondrej Oprala <ooprala@redhat.com - 2.0.4-1
 - 2.0.4
 

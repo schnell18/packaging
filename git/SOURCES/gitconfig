@@ -1,0 +1,23 @@
+[core]
+	editor = vim
+	autocrlf = input
+[color]
+	ui = true
+[merge]
+	tool = vimdiff
+[push]
+	default = simple
+[alias]
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
+	dfs = diff --staged
+	mgf = merge --ff-only
+	logg = log --graph --decorate --oneline --abbrev-commit --all
+	unstage = reset HEAD --
+	last = log -1 HEAD
+	desc = describe
+[credential]
+	helper = cache --timeout 36000
+
