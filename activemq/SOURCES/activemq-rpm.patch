@@ -6,12 +6,12 @@ diff -urN apache-activemq-5.10.0/bin/linux-x86-32/activemq apache-activemq-5.10.
  APP_NAME="ActiveMQ"
  APP_LONG_NAME="ActiveMQ Broker"
 -ACTIVEMQ_HOME="../.."
-+ACTIVEMQ_HOME="/usr/activemq"
++ACTIVEMQ_HOME="/usr/share/activemq"
 
  # Wrapper
 -WRAPPER_CMD="wrapper"
 -WRAPPER_CONF="wrapper.conf"
-+WRAPPER_CMD="/usr/activemq/bin/wrapper"
++WRAPPER_CMD="/usr/share/activemq/bin/wrapper"
 +WRAPPER_CONF="/etc/activemq/wrapper.conf"
 
  # Priority at which to run the wrapper.  See "man nice" for valid priorities.
@@ -52,8 +52,8 @@ diff -urN apache-activemq-5.10.0/bin/linux-x86-32/wrapper.conf apache-activemq-5
 -set.default.ACTIVEMQ_CONF=%ACTIVEMQ_BASE%/conf
 -set.default.ACTIVEMQ_DATA=%ACTIVEMQ_BASE%/data
 -wrapper.working.dir=.
-+set.default.ACTIVEMQ_HOME=/usr/activemq
-+set.default.ACTIVEMQ_BASE=/usr/activemq
++set.default.ACTIVEMQ_HOME=/usr/share/activemq
++set.default.ACTIVEMQ_BASE=/usr/share/activemq
 +set.default.ACTIVEMQ_CONF=/etc/activemq
 +set.default.ACTIVEMQ_DATA=/var/lib/activemq/data
 +wrapper.working.dir=/var/lib/activemq
@@ -103,12 +103,12 @@ diff -urN apache-activemq-5.10.0/bin/linux-x86-64/activemq apache-activemq-5.10.
  APP_NAME="ActiveMQ"
  APP_LONG_NAME="ActiveMQ Broker"
 -ACTIVEMQ_HOME="../.."
-+ACTIVEMQ_HOME="/usr/activemq"
++ACTIVEMQ_HOME="/usr/share/activemq"
 
  # Wrapper
 -WRAPPER_CMD="wrapper"
 -WRAPPER_CONF="wrapper.conf"
-+WRAPPER_CMD="/usr/activemq/bin/wrapper"
++WRAPPER_CMD="/usr/share/activemq/bin/wrapper"
 +WRAPPER_CONF="/etc/activemq/wrapper.conf"
 
  # Priority at which to run the wrapper.  See "man nice" for valid priorities.
@@ -149,8 +149,8 @@ diff -urN apache-activemq-5.10.0/bin/linux-x86-64/wrapper.conf apache-activemq-5
 -set.default.ACTIVEMQ_CONF=%ACTIVEMQ_BASE%/conf
 -set.default.ACTIVEMQ_DATA=%ACTIVEMQ_BASE%/data
 -wrapper.working.dir=.
-+set.default.ACTIVEMQ_HOME=/usr/activemq
-+set.default.ACTIVEMQ_BASE=/usr/activemq
++set.default.ACTIVEMQ_HOME=/usr/share/activemq
++set.default.ACTIVEMQ_BASE=/usr/share/activemq
 +set.default.ACTIVEMQ_CONF=/etc/activemq
 +set.default.ACTIVEMQ_DATA=/var/lib/activemq/data
 +wrapper.working.dir=/var/lib/activemq

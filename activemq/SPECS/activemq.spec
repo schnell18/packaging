@@ -1,4 +1,4 @@
-%define amqhome %{_prefix}/activemq
+%define short_name activemq
 %define os_user  activemq
 %define os_group activemq
 
@@ -9,7 +9,7 @@
 
 Name: apache-activemq
 Version: 5.10.0
-Release: 1%{?dist}
+Release: 3%{?dist}
 Summary: ActiveMQ Messaging Broker
 Group: System Environment/Daemons
 License: ASL 2.0
@@ -28,10 +28,19 @@ Patterns and many advanced features while fully supporting JMS 1.1 and J2EE
 %package client
 Summary: Client jar for Apache ActiveMQ
 Group: System Environment/Libraries
+BuildArch: noarch
 
 %description client
 Client jar for Apache ActiveMQ.
 
+
+%package examples
+Summary: Apache ActiveMQ examples
+Group: System Environment/Libraries
+BuildArch: noarch
+
+%description examples
+Examples for Apache ActiveMQ.
 
 %prep
 %setup -q -n %{name}-%{version}
@@ -45,7 +54,7 @@ Client jar for Apache ActiveMQ.
 rm -rf %{buildroot}
 
 install -d %{buildroot}%{_javadir}
-install -d %{buildroot}%{amqhome}
+install -d %{buildroot}%{_datadir}/%{short_name}
 install -d %{buildroot}/usr/bin
 install -d %{buildroot}/etc/activemq
 install -d %{buildroot}/etc/init.d
@@ -53,10 +62,10 @@ install -d %{buildroot}/var/log/activemq
 install -d %{buildroot}/var/run/activemq
 install -d %{buildroot}/var/lib/activemq/data
 
-mv * %{buildroot}%{amqhome}
+mv * %{buildroot}%{_datadir}/%{short_name}
 
 # move arch-specific wrapper binaries to parent directory
-pushd %{buildroot}%{amqhome}
+pushd %{buildroot}%{_datadir}/%{short_name}
     %ifarch i386 i686
         mv bin/linux-x86-32/wrapper bin
         mv bin/linux-x86-32/libwrapper.so bin
@@ -80,18 +89,18 @@ popd
 
 # move all conf/* except DIRECTORY_MOVED to /etc/activemq
 # http://stackoverflow.com/questions/670460/move-all-files-except-one
-pushd %{buildroot}%{amqhome}/conf
+pushd %{buildroot}%{_datadir}/%{short_name}/conf
     ls -1 | grep -v ^DIRECTORY_MOVED | xargs -I{} mv {} %{buildroot}/etc/activemq
 popd
 
 # create activemq client binary symlinks in /usr/bin, thanks to
 pushd %{buildroot}/usr/bin
-    rd=`echo %{amqhome} | cut -c2-`
+    rd=`echo %{_datadir}/%{short_name} | cut -c2-`
     ln -s ../../$rd/bin/activemq-admin activemq-admin
     ln -s ../../$rd/bin/activemq activemq
 popd
 
-mv %{buildroot}%{amqhome}/activemq-all-%{version}.jar %{buildroot}%{_javadir}
+mv %{buildroot}%{_datadir}/%{short_name}/activemq-all-%{version}.jar %{buildroot}%{_javadir}
 pushd %{buildroot}%{_javadir}
     for jar in *-%{version}*
     do
@@ -100,7 +109,7 @@ pushd %{buildroot}%{_javadir}
 popd
 
 # remove the empty activemq.log
-pushd %{buildroot}%{amqhome}/data
+pushd %{buildroot}%{_datadir}/%{short_name}/data
     [ -f activemq.log ] && rm -f activemq.log
 popd
 
@@ -135,7 +144,15 @@ fi
 %attr(755,%{os_user},%{os_group}) %dir /var/log/activemq
 %attr(755,%{os_user},%{os_group}) %dir /var/run/activemq
 %attr(755,%{os_user},%{os_group}) /var/lib/activemq
-%{amqhome}
+%{_datadir}/%{short_name}/bin
+%{_datadir}/%{short_name}/data
+%{_datadir}/%{short_name}/LICENSE
+%{_datadir}/%{short_name}/README.txt
+%{_datadir}/%{short_name}/conf
+%{_datadir}/%{short_name}/docs
+%{_datadir}/%{short_name}/lib
+%{_datadir}/%{short_name}/NOTICE
+%{_datadir}/%{short_name}/webapps
 
 
 %files client
@@ -143,6 +160,16 @@ fi
 %{_javadir}
 
 
+%files examples
+%defattr(-,root,root,-)
+%{_datadir}/%{short_name}/examples
+%{_datadir}/%{short_name}/webapps-demo
+
+
 %changelog
-* Thu Jul 31 2014 Justin Zhang <dos.7182@gmail.com> - 5.10.0-1
+* Mon Aug 25 2014 Justin Zhang <schnell18@gmail.com> - 5.10.0-3
+- Move examples to its own package
+* Fri Aug 22 2014 Justin Zhang <schnell18@gmail.com> - 5.10.0-2
+- Move from /usr to /usr/share to be FHS compliant
+* Thu Jul 31 2014 Justin Zhang <schnell18@gmail.com> - 5.10.0-1
 - refactor for 5.10.0
