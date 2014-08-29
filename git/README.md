@@ -78,8 +78,21 @@ Install the libotf package explicitly solves this problem:
 
     sudo yum install libotf
 
+# Issue 1: patch5 does not apply cleanly to Git 2.1.0
+## Symptom
+rpmbuild stops when the patch5 is applied.
+
+## Cause analysis
+The patch5 is no longer needed as it has been merged into the
+upstream(see [this commit][6])
+
+## Resolution
+Remove the patch5 from the spec file as well the patch itself.
+
+
 [1]: http://pkgs.fedoraproject.org/cgit/git.git/tree/git.spec?h=f21
 [2]: http://superuser.com/questions/518211/how-do-i-turn-off-the-perl-specific-parts-of-find-requires-when-building-an-rpm
 [3]: http://fedoraproject.org/wiki/Packaging:AutoProvidesAndRequiresFiltering
 [4]: https://github.com/repoforge/rpms/blob/master/specs/git/git.spec
 [5]: https://bugzilla.redhat.com/show_bug.cgi?id=806031
+[6]: https://github.com/git/git/commit/2c45009b734beed92414fd7249faa0b009432a1b
