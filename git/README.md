@@ -78,7 +78,7 @@ Install the libotf package explicitly solves this problem:
 
     sudo yum install libotf
 
-# Issue 1: patch5 does not apply cleanly to Git 2.1.0
+# Issue 4: patch5 does not apply cleanly to Git 2.1.0
 ## Symptom
 rpmbuild stops when the patch5 is applied.
 
