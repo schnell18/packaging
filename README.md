@@ -14,5 +14,15 @@ RPM spec catalog
 * activemq:  repack activemq 5.10.0
 * git:       repack git 2.1.0(based on fedora 21), fix circular dependencies
 * bash-git-prompt: create RPM package for the nice-looking [bash-git-prompt][1]
+* redis:     upgrade to redis 2.8.17 based on the spec file from fedora project
+
+Regenerate the RPM
+==================
+To regenerate the RPM, you first down the source rpm in the SOURCES
+directory and type command like:
+
+    rpmbuild --rebuild <src_rpm_file>
+
+The generated RPM is located at ~/rpmbuild/RPMS/{x86\_64,i686}/.
 
 [1]: https://github.com/magicmonty/bash-git-prompt
