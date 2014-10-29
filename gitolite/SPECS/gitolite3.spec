@@ -1,16 +1,11 @@
 %global perl_vendorlib %(eval $(perl -V:vendorlib); echo $vendorlib)
-# RHEL uses %%{_prefix}/com for %%{_sharedstatedir} instead of /var/lib
-%if 0%{?rhel}
 %global gitolite_homedir /var/lib/%{name}
-%else
-%global gitolite_homedir %{_sharedstatedir}/%{name}
-%endif
 
 %define os_user git
 
 Name:           gitolite3
 Epoch:          1
-Version:        3.5.3.1
+Version:        3.6.1
 Release:        1%{?dist}
 Summary:        Highly flexible server for git directory version tracker
 
@@ -25,6 +20,7 @@ Requires:       git
 Requires:       openssh-clients
 Requires:       perl(:MODULE_COMPAT_%(eval $(%{__perl} -V:version); echo $version))
 Requires(pre):  shadow-utils
+AutoReqProv:    no
 
 %description
 Gitolite allows a server to host many git repositories and provide access
@@ -63,6 +59,7 @@ cp -pr src/lib/Gitolite $RPM_BUILD_ROOT%{perl_vendorlib}
 echo "%{version}-%{release}" >src/VERSION
 cp -a src/* $RPM_BUILD_ROOT%{_datadir}/%{name}
 ln -s %{_datadir}/%{name}/gitolite $RPM_BUILD_ROOT%{_bindir}/gitolite
+ln -s %{_datadir}/%{name}/gitolite-shell $RPM_BUILD_ROOT%{_bindir}/gitolite-shell
 
 # empty authorized_keys file
 touch $RPM_BUILD_ROOT%{gitolite_homedir}/.ssh/authorized_keys
@@ -88,6 +85,9 @@ exit 0
 
 
 %changelog
+* Wed Oct 29 2014 Justin Zhang <schnell18@gmail.com> - 1:3.6.1-1
+- Set git user home directory to /var/lib/gitolite3
+
 * Wed Oct 23 2013 Jon Ciesla <limburgher@gmail.com> - 1:3.5.3.1-1
 - Latest upstream.
 
