@@ -11,8 +11,6 @@ Source1:          %{name}.logrotate
 Source2:          %{name}.init
 Patch0:           redis.conf.patch
 
-BuildRequires:    tcl >= 8.5
-
 Requires:         logrotate
 Requires(post):   chkconfig
 Requires(postun): initscripts
@@ -46,9 +44,6 @@ make %{?_smp_mflags} \
   V=1 \
   all
 
-%check
-# make test
-
 %install
 rm -fr %{buildroot}
 make install PREFIX=%{buildroot}%{_prefix}
@@ -63,7 +58,7 @@ install -d -m 755 %{buildroot}%{_localstatedir}/log/%{name}
 # Fix non-standard-executable-perm error
 chmod 755 %{buildroot}%{_bindir}/%{name}-*
 
-# Ensure redis-server location doesn't change
+# Install redis-server into sbin
 mkdir -p %{buildroot}%{_sbindir}
 mv %{buildroot}%{_bindir}/%{name}-server %{buildroot}%{_sbindir}/%{name}-server
 
