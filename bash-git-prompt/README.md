@@ -1,4 +1,11 @@
 # Introduction
+As of Aug 8, 2014, this spec file was accepted by upstream. So it is very
+simple to build the rpm:
+
+    wget https://github.com/magicmonty/bash-git-prompt/archive/%{name}-%{version}.tgz
+    rpmbuild -ta %{name}-%{version}.tgz
+
+
 This packages the nice-looking [bash-git-prompt][1] into an RPM to ease
 the installation.
 
