@@ -1,19 +1,29 @@
-Name:           fcgiwrap
-Version:        1.1.0
-Release:        1%{?dist}
-Summary:        Simple FastCGI wrapper for CGI scripts
-Group:          System Environment/Daemons
-License:        BSD-like
-URL:            http://nginx.localdomain.pl/wiki/FcgiWrap
-Source0:        https://github.com/gnosek/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
-Patch0:         Makefile.in.patch
-Patch1:         fcgiwrap.service.patch
-BuildRequires:  autoconf automake fcgi-devel pkgconfig systemd-devel
-Requires:       fcgi
+%define systemd_test_str %(
+if [[ -z $(pkg-config --print-errors libsystemd-daemon 2>&1) ]]; then
+  echo "yes"
+else
+  echo "no"
+fi
+)
+%if "%{systemd_test_str}" == "yes"
+    %define with_systemd 1
+%endif
+
+Name:		fcgiwrap
+Version:	1.1.0
+Release:	1%{?dist}
+Summary:	Simple FastCGI wrapper for CGI scripts
+Group:		System Environment/Daemons
+License:	BSD-like
+URL:		http://nginx.localdomain.pl/wiki/FcgiWrap
+Source0:	%{name}-%{version}.tgz
+BuildRequires:	autoconf automake fcgi-devel pkgconfig
+%{?with_systemd:BuildRequires:  systemd-devel systemd}
+Requires:	fcgi
 
 
 %description
-This package provides a simple FastCGI wrapper for CGI scripts with
+This package provides a simple FastCGI wrapper for CGI scripts with/
 following features:
  - very lightweight (84KB of private memory per instance)
  - fixes broken CR/LF in headers
@@ -29,8 +39,7 @@ following features:
 
 %prep
 %setup -q
-%patch0 -p1 -b .orig
-%patch1 -p1 -b .orig
+
 
 %build
 autoreconf -i
@@ -50,20 +59,34 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %{_sbindir}/fcgiwrap
-%{_mandir}/man8/*
-%{_unitdir}/*.service
-%{_unitdir}/*.socket
+#TODO: figure out why the manpage file is compressed automatically
+%doc %{_mandir}/man8/fcgiwrap.8.gz
+%{?with_systemd:
+    %{_unitdir}/*.service
+    %{_unitdir}/*.socket
+}
 
 
 %post
 # enable socket activation for fcgiwrap
-/usr/bin/systemctl enable fcgiwrap.socket
+if [[ -z $(pkg-config --print-errors libsystemd-daemon 2>&1) ]]; then
+    /usr/bin/systemctl enable fcgiwrap.socket
+    /usr/bin/systemctl start fcgiwrap.socket
+
+    cat <<BANNER
+==================================================
+FCGI service fcgiwrap is ready!!!
+==================================================
+BANNER
+fi
 
 
 %preun
 # stop and disable socket activation for fcgiwrap
-/usr/bin/systemctl stop fcgiwrap.socket
-/usr/bin/systemctl disable fcgiwrap.socket
+if [[ -z $(pkg-config --print-errors libsystemd-daemon 2>&1) ]]; then
+    /usr/bin/systemctl stop fcgiwrap.socket
+    /usr/bin/systemctl disable fcgiwrap.socket
+fi
 
 
 %changelog
