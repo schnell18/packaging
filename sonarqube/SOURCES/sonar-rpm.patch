@@ -1,0 +1,364 @@
+diff -urN sonarqube-4.5.1/bin/linux-x86-32/sonar.sh sonarqube-4.5.1_rpm/bin/linux-x86-32/sonar.sh
+--- sonarqube-4.5.1/bin/linux-x86-32/sonar.sh	2014-10-29 11:08:26.000000000 +0800
++++ sonarqube-4.5.1_rpm/bin/linux-x86-32/sonar.sh	2014-12-16 22:32:36.000000000 +0800
+@@ -10,8 +10,8 @@
+ #-----------------------------------------------------------------------------
+ # These settings can be modified to fit the needs of your application
+ 
+-# Default values for the Application variables, below. 
+-# 
++# Default values for the Application variables, below.
++#
+ # NOTE: The build for specific applications may override this during the resource-copying
+ # phase, to fill in a concrete name and avoid the use of the defaults specified here.
+ DEF_APP_NAME="SonarQube"
+@@ -22,15 +22,15 @@
+ APP_LONG_NAME="${DEF_APP_LONG_NAME}"
+ 
+ # Wrapper
+-WRAPPER_CMD="./wrapper"
+-WRAPPER_CONF="../../conf/wrapper.conf"
++WRAPPER_CMD="/usr/share/sonar/bin/wrapper"
++WRAPPER_CONF="/etc/sonar/wrapper.conf"
+ 
+ # Priority at which to run the wrapper.  See "man nice" for valid priorities.
+ #  nice is only used if a priority is specified.
+ PRIORITY=
+ 
+ # Location of the pid file.
+-PIDDIR="."
++PIDDIR="/var/run/sonar"
+ 
+ # If uncommented, causes the Wrapper to be shutdown using an anchor file.
+ #  When launched with the 'start' command, it will also ignore all INT and
+@@ -45,7 +45,7 @@
+ # NOTE - This will set the user which is used to run the Wrapper as well as
+ #  the JVM and is not useful in situations where a privileged resource or
+ #  port needs to be allocated prior to the user being changed.
+-#RUN_AS_USER=
++RUN_AS_USER=sonar
+ 
+ # The following two lines are used by the chkconfig command. Change as is
+ #  appropriate for your application.  They should remain commented.
+@@ -303,7 +303,7 @@
+                 exit 1
+             fi
+         fi
+-    
++
+         if [ "`$IDEXE -u -n`" = "$RUN_AS_USER" ]
+         then
+             # Already running as the configured user.  Avoid password prompts by not calling su.
+@@ -320,7 +320,7 @@
+         then
+             if [ "X$1" != "X" ]
+             then
+-                # Resolve the primary group 
++                # Resolve the primary group
+                 RUN_AS_GROUP=`groups $RUN_AS_USER | awk '{print $3}' | tail -1`
+                 if [ "X$RUN_AS_GROUP" = "X" ]
+                 then
+@@ -406,7 +406,7 @@
+         exit 1
+     fi
+ }
+- 
++
+ start() {
+     echo "Starting $APP_LONG_NAME..."
+     getpid
+@@ -425,9 +425,9 @@
+         echo "Started $APP_LONG_NAME."
+     else
+         echo "Failed to start $APP_LONG_NAME."
+-    fi    
++    fi
+ }
+- 
++
+ stopit() {
+     echo "Stopping $APP_LONG_NAME..."
+     getpid
+@@ -561,4 +561,4 @@
+         ;;
+ esac
+ 
+-exit 0
+\ No newline at end of file
++exit 0
+diff -urN sonarqube-4.5.1/bin/linux-x86-64/sonar.sh sonarqube-4.5.1_rpm/bin/linux-x86-64/sonar.sh
+--- sonarqube-4.5.1/bin/linux-x86-64/sonar.sh	2014-10-29 11:08:26.000000000 +0800
++++ sonarqube-4.5.1_rpm/bin/linux-x86-64/sonar.sh	2014-12-16 22:35:27.000000000 +0800
+@@ -10,8 +10,8 @@
+ #-----------------------------------------------------------------------------
+ # These settings can be modified to fit the needs of your application
+ 
+-# Default values for the Application variables, below. 
+-# 
++# Default values for the Application variables, below.
++#
+ # NOTE: The build for specific applications may override this during the resource-copying
+ # phase, to fill in a concrete name and avoid the use of the defaults specified here.
+ DEF_APP_NAME="SonarQube"
+@@ -22,15 +22,15 @@
+ APP_LONG_NAME="${DEF_APP_LONG_NAME}"
+ 
+ # Wrapper
+-WRAPPER_CMD="./wrapper"
+-WRAPPER_CONF="../../conf/wrapper.conf"
++WRAPPER_CMD="/usr/share/sonar/bin/wrapper"
++WRAPPER_CONF="/etc/sonar/wrapper.conf"
+ 
+ # Priority at which to run the wrapper.  See "man nice" for valid priorities.
+ #  nice is only used if a priority is specified.
+ PRIORITY=
+ 
+ # Location of the pid file.
+-PIDDIR="."
++PIDDIR="/var/run/sonar"
+ 
+ # If uncommented, causes the Wrapper to be shutdown using an anchor file.
+ #  When launched with the 'start' command, it will also ignore all INT and
+@@ -45,7 +45,7 @@
+ # NOTE - This will set the user which is used to run the Wrapper as well as
+ #  the JVM and is not useful in situations where a privileged resource or
+ #  port needs to be allocated prior to the user being changed.
+-#RUN_AS_USER=
++RUN_AS_USER=sonar
+ 
+ # The following two lines are used by the chkconfig command. Change as is
+ #  appropriate for your application.  They should remain commented.
+@@ -303,7 +303,7 @@
+                 exit 1
+             fi
+         fi
+-    
++
+         if [ "`$IDEXE -u -n`" = "$RUN_AS_USER" ]
+         then
+             # Already running as the configured user.  Avoid password prompts by not calling su.
+@@ -320,7 +320,7 @@
+         then
+             if [ "X$1" != "X" ]
+             then
+-                # Resolve the primary group 
++                # Resolve the primary group
+                 RUN_AS_GROUP=`groups $RUN_AS_USER | awk '{print $3}' | tail -1`
+                 if [ "X$RUN_AS_GROUP" = "X" ]
+                 then
+@@ -406,7 +406,7 @@
+         exit 1
+     fi
+ }
+- 
++
+ start() {
+     echo "Starting $APP_LONG_NAME..."
+     getpid
+@@ -425,9 +425,9 @@
+         echo "Started $APP_LONG_NAME."
+     else
+         echo "Failed to start $APP_LONG_NAME."
+-    fi    
++    fi
+ }
+- 
++
+ stopit() {
+     echo "Stopping $APP_LONG_NAME..."
+     getpid
+@@ -561,4 +561,4 @@
+         ;;
+ esac
+ 
+-exit 0
+\ No newline at end of file
++exit 0
+diff -urN sonarqube-4.5.1/conf/wrapper.conf sonarqube-4.5.1_rpm/conf/wrapper.conf
+--- sonarqube-4.5.1/conf/wrapper.conf	2014-10-29 11:08:26.000000000 +0800
++++ sonarqube-4.5.1_rpm/conf/wrapper.conf	2014-12-16 23:22:10.000000000 +0800
+@@ -1,88 +1,91 @@
+-# Path to JVM executable. By default it must be available in PATH.
+-# Can be an absolute path, for example:
+-#wrapper.java.command=/path/to/my/jdk/bin/java
+-wrapper.java.command=java
+-
+-
+-#
+-# DO NOT EDIT THE FOLLOWING SECTIONS
+-#
+-
+-
+-#********************************************************************
+-# Wrapper Java
+-#********************************************************************
+-wrapper.java.additional.1=-Djava.awt.headless=true
+-wrapper.java.mainclass=org.tanukisoftware.wrapper.WrapperSimpleApp
+-wrapper.java.classpath.1=../../lib/jsw/*.jar
+-wrapper.java.classpath.2=../../lib/*.jar
+-wrapper.java.library.path.1=./lib
+-wrapper.app.parameter.1=org.sonar.application.App
+-wrapper.java.initmemory=3
+-# Xmx can't be set to a lower value because of compatibility with Java 6
+-wrapper.java.maxmemory=32
+-
+-#********************************************************************
+-# Wrapper Logs
+-#********************************************************************
+-
+-wrapper.console.format=PM
+-wrapper.console.loglevel=INFO
+-wrapper.logfile=../../logs/sonar.log
+-wrapper.logfile.format=M
+-wrapper.logfile.loglevel=INFO
+-
+-# Maximum size that the log file will be allowed to grow to before
+-#  the log is rolled. Size is specified in bytes.  The default value
+-#  of 0, disables log rolling.  May abbreviate with the 'k' (kb) or
+-#  'm' (mb) suffix.  For example: 10m = 10 megabytes.
+-#wrapper.logfile.maxsize=0
+-
+-# Maximum number of rolled log files which will be allowed before old
+-#  files are deleted.  The default value of 0 implies no limit.
+-#wrapper.logfile.maxfiles=0
+-
+-# Log Level for sys/event log output.  (See docs for log levels)
+-wrapper.syslog.loglevel=NONE
+-
+-#********************************************************************
+-# Wrapper Windows Properties
+-#********************************************************************
+-# Title to use when running as a console
+-wrapper.console.title=SonarQube
+-
+-# Disallow start of multiple instances of an application at the same time on Windows
+-wrapper.single_invocation=true
+-
+-#********************************************************************
+-# Wrapper Windows NT/2000/XP Service Properties
+-#********************************************************************
+-# WARNING - Do not modify any of these properties when an application
+-#  using this configuration file has been installed as a service.
+-#  Please uninstall the service before modifying this section.  The
+-#  service can then be reinstalled.
+-
+-# Name of the service
+-wrapper.ntservice.name=SonarQube
+-
+-# Display name of the service
+-wrapper.ntservice.displayname=SonarQube
+-
+-# Description of the service
+-wrapper.ntservice.description=SonarQube
+-
+-# Service dependencies.  Add dependencies as needed starting from 1
+-wrapper.ntservice.dependency.1=
+-
+-# Mode in which the service is installed.  AUTO_START or DEMAND_START
+-wrapper.ntservice.starttype=AUTO_START
+-
+-# Allow the service to interact with the desktop.
+-wrapper.ntservice.interactive=false
+-
+-#********************************************************************
+-# Forking Properties
+-#********************************************************************
+-wrapper.disable_restarts=TRUE
+-wrapper.ping.timeout=0
+-wrapper.shutdown.timeout=3000
+\ No newline at end of file
++# Path to JVM executable. By default it must be available in PATH.
++# Can be an absolute path, for example:
++#wrapper.java.command=/path/to/my/jdk/bin/java
++wrapper.java.command=java
++
++
++#
++# DO NOT EDIT THE FOLLOWING SECTIONS
++#
++
++# set the SONAR_HOME
++set.default.SONAR_HOME=/usr/share/sonar
++
++#********************************************************************
++# Wrapper Java
++#********************************************************************
++wrapper.java.additional.1=-Djava.awt.headless=true
++wrapper.java.mainclass=org.tanukisoftware.wrapper.WrapperSimpleApp
++wrapper.java.classpath.1=%SONAR_HOME%/lib/jsw/*.jar
++wrapper.java.classpath.2=%SONAR_HOME%/lib/*.jar
++wrapper.java.library.path.1=%SONAR_HOME%/bin/
++wrapper.app.parameter.1=org.sonar.application.App
++wrapper.app.parameter.2=-Dsonar.path.home=%SONAR_HOME%
++wrapper.app.parameter.3=-Dsonar.path.logs=/var/log/sonar
++wrapper.app.parameter.4=-Dsonar.path.data=/var/lib/sonar/data
++wrapper.app.parameter.5=-Dsonar.path.log=/var/log/sonar
++wrapper.app.parameter.6=-Dsonar.path.temp=/var/lib/sonar/temp
++wrapper.java.initmemory=3
++# Xmx can't be set to a lower value because of compatibility with Java 6
++wrapper.java.maxmemory=32
++
++#********************************************************************
++# Wrapper Logs
++#********************************************************************
++
++wrapper.console.format=PM
++wrapper.console.loglevel=INFO
++wrapper.logfile=/var/log/sonar/sonar.log
++wrapper.logfile.format=M
++wrapper.logfile.loglevel=INFO
++
++# Maximum size that the log file will be allowed to grow to before
++#  the log is rolled. Size is specified in bytes.  The default value
++#  of 0, disables log rolling.  May abbreviate with the 'k' (kb) or
++#  'm' (mb) suffix.  For example: 10m = 10 megabytes.
++#wrapper.logfile.maxsize=0
++
++# Maximum number of rolled log files which will be allowed before old
++#  files are deleted.  The default value of 0 implies no limit.
++#wrapper.logfile.maxfiles=0
++
++# Log Level for sys/event log output.  (See docs for log levels)
++wrapper.syslog.loglevel=NONE
++
++#********************************************************************
++# Wrapper Windows Properties
++#********************************************************************
++# Title to use when running as a console
++wrapper.console.title=SonarQube
++
++# Disallow start of multiple instances of an application at the same time on Windows
++wrapper.single_invocation=true
++
++#********************************************************************
++# Wrapper Windows NT/2000/XP Service Properties
++#********************************************************************
++# WARNING - Do not modify any of these properties when an application
++#  using this configuration file has been installed as a service.
++#  Please uninstall the service before modifying this section.  The
++#  service can then be reinstalled.
++
++# Name of the service
++wrapper.ntservice.name=SonarQube
++
++# Display name of the service
++wrapper.ntservice.displayname=SonarQube
++
++# Description of the service
++wrapper.ntservice.description=SonarQube
++
++# Service dependencies.  Add dependencies as needed starting from 1
++wrapper.ntservice.dependency.1=
++
++# Mode in which the service is installed.  AUTO_START or DEMAND_START
++wrapper.ntservice.starttype=AUTO_START
++
++# Allow the service to interact with the desktop.
++wrapper.ntservice.interactive=false
++
++#********************************************************************
++# Forking Properties
++#********************************************************************
++wrapper.disable_restarts=TRUE
++wrapper.ping.timeout=0
++wrapper.shutdown.timeout=3000
