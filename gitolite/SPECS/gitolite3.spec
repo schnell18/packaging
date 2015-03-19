@@ -94,7 +94,7 @@ EOF
 %attr(750,%{os_user},%{os_user}) %dir %{gitolite_homedir}
 %attr(750,%{os_user},%{os_user}) %dir %{gitolite_homedir}/.ssh
 %config(noreplace) %attr(640,%{os_user},%{os_user}) %{gitolite_homedir}/.ssh/authorized_keys
-%doc COPYING README.txt CHANGELOG
+%doc COPYING README.markdown CHANGELOG
 
 
 %changelog
