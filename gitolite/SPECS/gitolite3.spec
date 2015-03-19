@@ -5,7 +5,7 @@
 
 Name:           gitolite3
 Epoch:          1
-Version:        3.6.1
+Version:        3.6.2
 Release:        1%{?dist}
 Summary:        Highly flexible server for git directory version tracker
 
@@ -39,8 +39,6 @@ elsewhere in the doc/ directory.
 %prep
 %setup -qn gitolite-%{version}
 
-#%patch0 -p1
-
 %build
 #This page intentionally left blank.
 
@@ -72,6 +70,21 @@ useradd -r -g %{os_user} -d %{gitolite_homedir} -s /bin/sh \
         -c "git repository hosting" %{os_user}
 exit 0
 
+%post
+cat <<EOF
+Please perform the following post-install setup
+1)  run "su - %{os_user}" to get a login shell on the gitolite
+    user
+2)  run "gitolite setup -a admin ." where admin is your gitolite admin
+username.
+
+On whatever machine your key came from (maybe your
+workstation or another account on the same server):
+
+3)  run "git clone gitolite@<name.or.ip>:gitolite-admin" to
+    start adding users and repos.
+
+EOF
 
 %files
 %{_bindir}/*
