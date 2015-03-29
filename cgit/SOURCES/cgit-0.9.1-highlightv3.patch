@@ -1,0 +1,13 @@
+diff -Nur cgit-0.9.1.orig/filters/syntax-highlighting.sh cgit-0.9.1/filters/syntax-highlighting.sh
+--- cgit-0.9.1.orig/filters/syntax-highlighting.sh	2012-11-14 17:28:59.000000000 -0700
++++ cgit-0.9.1/filters/syntax-highlighting.sh	2012-11-17 10:47:07.870778180 -0700
+@@ -53,7 +53,7 @@
+ # found (for example) on EPEL 6.
+ #
+ # This is for version 2
+-exec highlight --force -f -I -X -S "$EXTENSION" 2>/dev/null
++#exec highlight --force -f -I -X -S "$EXTENSION" 2>/dev/null
+ 
+ # This is for version 3
+-#exec highlight --force -f -I -O xhtml -S "$EXTENSION" 2>/dev/null
++exec highlight --force -f -I -O xhtml -S "$EXTENSION" 2>/dev/null

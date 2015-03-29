@@ -1,0 +1,21 @@
+If you use SELinux, you need to ensure that the httpd_enable_cgi boolean is
+set properly.  This can be done via the command line, e.g.:
+
+   # setsebool -P httpd_enable_cgi 1
+
+Or you can use the graphical tool system-config-selinux, via System ->
+Administration -> SELinux Management on the Gnome menu.
+
+Additionally, the git repositories need to be readable by the cgi.  This is
+handled automatically for repositories in the default path, /var/lib/git.  If
+your repositories are in a different path, /srv/git, for example, you can set
+the proper context using semanage:
+
+    # semanage fcontext -a -t @CGIT_CONTEXT@ "/srv/git(/.*)?"
+
+If you have other confined daemons that need to access the git repositories,
+you may want to use public_content_t, or public_content_rw_t instead.
+
+Then use restorecon to update the contexts:
+
+    # restorecon -RF /srv/git

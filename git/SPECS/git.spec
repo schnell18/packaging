@@ -43,20 +43,20 @@
 %endif
 
 Name:           git
-Version:        2.1.0
+Version:        2.3.4
 Release:        1%{?dist}
 Summary:        Fast Version Control System
 License:        GPLv2
 Group:          Development/Tools
 URL:            http://git-scm.com/
-Source0:        http://www.kernel.org/pub/software/scm/git/%{name}-%{version}.tar.gz
+Source0:        http://www.kernel.org/pub/software/scm/git/%{name}-%{version}.tar.xz
 Source2:        git-init.el
 Source3:        git.xinetd.in
 Source4:        git.conf.httpd
 Source5:        git-gui.desktop
 Source6:        gitweb.conf.in
-Source10:       http://www.kernel.org/pub/software/scm/git/%{name}-manpages-%{version}.tar.gz
-Source11:       http://www.kernel.org/pub/software/scm/git/%{name}-htmldocs-%{version}.tar.gz
+Source10:       http://www.kernel.org/pub/software/scm/git/%{name}-manpages-%{version}.tar.xz
+Source11:       http://www.kernel.org/pub/software/scm/git/%{name}-htmldocs-%{version}.tar.xz
 Source12:       git.service
 Source13:       git.socket
 Source20:       gitconfig
@@ -638,6 +638,10 @@ rm -rf %{buildroot}
 # No files for you!
 
 %changelog
+* Sun Mar 29 2015 Justin Zhang <fgz@qad.com> - 2.3.4-1
+- Update to upstream version 2.3.4
+- Reduce download size by using .xz source
+
 * Thu Aug 28 2014 Justin Zhang <fgz@qad.com> - 2.1.0-1
 - Update to upstream version 2.1.0
 - Remove patch5 as it has been merged in the upstream

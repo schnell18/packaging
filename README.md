@@ -2,7 +2,10 @@ Introduction
 ============
 
 Collections of customized or home-brew spec files for some open source
-softwares.
+softwares. This project includes a Vagrantfile to facilitate preparation
+of RPM build environment. The vagrant box is built from a minimal CentOS
+7 image. The exact instructions to build this box are located at [the
+vmbot github project][1]
 
 RPM spec catalog
 ================
@@ -12,8 +15,9 @@ RPM spec catalog
 * pure-fptd: repack to enable upload script and use upstream version 1.0.36
 * ngix:      repack to enable LDAP authentication via nginx-auth-ldap
 * activemq:  repack activemq 5.10.0
-* git:       repack git 2.1.0(based on fedora 21), fix circular dependencies
-* bash-git-prompt: create RPM package for the nice-looking [bash-git-prompt][1]
+* git:       repack git 2.3.4(based on fedora 21), fix circular dependencies
+* cgit:      repack cgit 2.1.0(based on epel7), cut down docs for docker
+* bash-git-prompt: create RPM package for the nice-looking [bash-git-prompt][2]
 * redis:     upgrade to redis 2.8.17 based on the spec file from fedora project
 * sonarqube: spec file to install SonarQube out-of-box
 
@@ -61,4 +65,5 @@ the problem:
     <Context path="/" allowLinking="true"/>
     </Context>
 
-[1]: https://github.com/magicmonty/bash-git-prompt
+[1]: https://github.com/schnell18/vmbot.git
+[2]: https://github.com/magicmonty/bash-git-prompt

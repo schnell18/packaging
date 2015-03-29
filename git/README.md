@@ -90,6 +90,14 @@ upstream(see [this commit][6])
 Remove the patch5 from the spec file as well the patch itself.
 
 
+# Instructions to get latest pristine source
+As of the spec for git 2.3.4. The command to download prinstine copy git
+is listed as follows:
+
+    # get pristine source of Git 2.3.4
+    curl https://www.kernel.org/pub/software/scm/git/git-2.3.4.tar.xz \
+         -o git-2.3.4.tar.xz
+
 [1]: http://pkgs.fedoraproject.org/cgit/git.git/tree/git.spec?h=f21
 [2]: http://superuser.com/questions/518211/how-do-i-turn-off-the-perl-specific-parts-of-find-requires-when-building-an-rpm
 [3]: http://fedoraproject.org/wiki/Packaging:AutoProvidesAndRequiresFiltering
