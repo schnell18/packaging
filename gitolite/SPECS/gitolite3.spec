@@ -20,7 +20,12 @@ Requires:       git
 Requires:       openssh-clients
 Requires:       perl(:MODULE_COMPAT_%(eval $(%{__perl} -V:version); echo $version))
 Requires(pre):  shadow-utils
-AutoReqProv:    no
+
+# remove the perl(Redis) dependency as Redis is optional and
+# there is no RPM to satisfy this dependency
+%filter_from_requires /^perl(Redis)/d
+%filter_setup
+
 
 %description
 Gitolite allows a server to host many git repositories and provide access
