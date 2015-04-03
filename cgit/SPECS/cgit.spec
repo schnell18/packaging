@@ -3,7 +3,7 @@
 %global gitver      2.3.4
 %global cachedir    %{_localstatedir}/cache/%{name}
 %global filterdir   %{_libexecdir}/%{name}/filters
-%global scriptdir   %{_localstatedir}/www/cgi-bin
+%global scriptdir   %{_localstatedir}/www/git
 %global cgitdata    %{_datadir}/%{name}
 
 %global syntax_highlight 0
@@ -99,17 +99,6 @@ esac
 sed -e "s|@CGIT_CONTEXT@|$cgit_context|g" \
     %{SOURCE3} > README.SELinux
 
-cat > httpd.conf <<EOF
-Alias /cgit-data /usr/share/cgit
-ScriptAlias /cgit /var/www/cgi-bin/cgit
-%if 0%{?fedora} >= 19 || 0%{?rhel} >= 7
-<Directory "/usr/share/cgit">
-    Require all granted
-</Directory>
-%endif
-EOF
-
-
 %build
 %{make_cgit}
 
@@ -124,7 +113,6 @@ rm -rf %{buildroot}
 %{make_cgit} install
 install -d -m0755 %{buildroot}%{_sysconfdir}/httpd/conf.d
 install -p -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/cgitrc
-install -p -m0644 httpd.conf %{buildroot}%{_sysconfdir}/httpd/conf.d/cgit.conf
 install -d -m0755 %{buildroot}%{cachedir}
 
 
@@ -136,12 +124,7 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %doc COPYING
 %config(noreplace) %{_sysconfdir}/cgitrc
-# Keep those two httpd-owned directories listed here until httpd-filesystem
-# becomes part of EPEL.  See rhbz#1138599 for more details.
-%dir %{_sysconfdir}/httpd
-%dir %{_sysconfdir}/httpd/conf.d
-%config(noreplace) %{_sysconfdir}/httpd/conf.d/cgit.conf
-%dir %attr(-,apache,root) %{cachedir}
+%dir %attr(-,root,root) %{cachedir}
 %{cgitdata}
 %{filterdir}/*
 %{scriptdir}/*

@@ -16,7 +16,7 @@ RPM spec catalog
 * ngix:      repack to enable LDAP authentication via nginx-auth-ldap
 * activemq:  repack activemq 5.10.0
 * git:       repack git 2.3.4(based on fedora 21), fix circular dependencies
-* cgit:      repack cgit 2.1.0(based on epel7), cut down docs for docker
+* cgit:      repack cgit 0.11.2(based on epel7), cut down docs for docker
 * bash-git-prompt: create RPM package for the nice-looking [bash-git-prompt][2]
 * redis:     upgrade to redis 2.8.17 based on the spec file from fedora project
 * sonarqube: spec file to install SonarQube out-of-box
