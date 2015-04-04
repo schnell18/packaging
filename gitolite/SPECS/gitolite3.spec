@@ -69,27 +69,11 @@ touch $RPM_BUILD_ROOT%{gitolite_homedir}/.ssh/authorized_keys
 
 
 %pre
-getent group %{os_user} >/dev/null || groupadd -r %{os_user}
+getent group %{os_user} >/dev/null || groupadd -r -g 888 %{os_user}
 getent passwd %{os_user} >/dev/null || \
-useradd -r -g %{os_user} -d %{gitolite_homedir} -s /bin/sh \
+useradd -r -o -u 888 -g %{os_user} -d %{gitolite_homedir} -s /bin/sh \
         -c "git repository hosting" %{os_user}
 exit 0
-
-%post
-cat <<EOF
-Please perform the following post-install setup
-1)  run "su - %{os_user}" to get a login shell on the gitolite
-    user
-2)  run "gitolite setup -a admin ." where admin is your gitolite admin
-username.
-
-On whatever machine your key came from (maybe your
-workstation or another account on the same server):
-
-3)  run "git clone gitolite@<name.or.ip>:gitolite-admin" to
-    start adding users and repos.
-
-EOF
 
 %files
 %{_bindir}/*
