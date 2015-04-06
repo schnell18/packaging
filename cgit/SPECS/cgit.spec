@@ -3,7 +3,7 @@
 %global gitver      2.3.4
 %global cachedir    %{_localstatedir}/cache/%{name}
 %global filterdir   %{_libexecdir}/%{name}/filters
-%global scriptdir   %{_localstatedir}/www/git
+%global scriptdir   %{_localstatedir}/www/cgi-bin
 %global cgitdata    %{_datadir}/%{name}
 
 %global syntax_highlight 0
