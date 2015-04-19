@@ -43,7 +43,7 @@
 %endif
 
 Name:           git
-Version:        2.3.4
+Version:        2.3.5
 Release:        1%{?dist}
 Summary:        Fast Version Control System
 License:        GPLv2
@@ -638,6 +638,9 @@ rm -rf %{buildroot}
 # No files for you!
 
 %changelog
+* Sun Apr 19 2015 Justin Zhang <fgz@qad.com> - 2.3.5-1
+- Update to upstream version 2.3.5
+
 * Sun Mar 29 2015 Justin Zhang <fgz@qad.com> - 2.3.4-1
 - Update to upstream version 2.3.4
 - Reduce download size by using .xz source

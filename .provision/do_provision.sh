@@ -3,7 +3,12 @@ function install_pre_requisite_warez() {
 }
 
 function setup_rpmbuild_env() {
+    # setup rpmbuild macros by copying /tmp/macros.rpmbuild
+    # which is provisioned by the file provisioner, to /etc/rpm
     mkdir -p /home/devel/rpmbuild/{SOURCES,SPECS,SRPMS,RPMS,BUILD}
+    mv /tmp/macros.rpmbuild /etc/rpm
+    chmod 664 /etc/rpm/macros.rpmbuild
+    chown root:root /etc/rpm/macros.rpmbuild
 }
 
 ########## MAIN BLOCK ##########

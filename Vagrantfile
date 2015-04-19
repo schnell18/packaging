@@ -1,6 +1,6 @@
 Vagrant.configure(2) do |config|
 
-  config.vm.box = "centos70-min"
+  config.vm.box = "centos66-jdk7"
   config.vm.box_check_update = false
 
   config.rdp.port = 5000
@@ -16,6 +16,7 @@ Vagrant.configure(2) do |config|
     vb.cpus   = 2
   end
 
+  config.vm.provision "file", source: ".provision/macros.rpmbuild", destination: "/tmp/macros.rpmbuild"
   config.vm.provision "shell", path: ".provision/do_provision.sh"
 end
 
