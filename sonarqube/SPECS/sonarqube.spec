@@ -8,13 +8,13 @@
 %undefine _missing_build_ids_terminate_build
 
 Name:    sonarqube
-Version: 4.5.1
+Version: 4.5.5
 Release: 1%{?dist}
 Summary: Open source platform for continuous inspection of code quality.
 Group: System Environment/Daemons
 License: LGPL 3.0
 URL: http://www.sonarqube.org
-Source0: http://dist.sonar.codehaus.org/%{name}-%{version}.zip
+Source0: http://downloads.sonarsource.com/sonarqube/%{name}-%{version}.zip
 Source1: context.xml
 Patch0: sonar-rpm.patch
 
@@ -34,6 +34,7 @@ measures.
 
 
 %build
+# This section is left blank intentionally
 
 
 %install
@@ -126,5 +127,7 @@ fi
 
 
 %changelog
+* Tue Sep 13 2015 Justin Zhang <schnell18@gmail.com> - 4.5.5-1
+- Create spec for SonarQube 4.5.5
 * Tue Dec 16 2014 Justin Zhang <schnell18@gmail.com> - 4.5.1-1
 - Create spec for SonarQube 4.5.1
