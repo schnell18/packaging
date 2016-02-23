@@ -1,6 +1,6 @@
-diff -urN sonarqube-5.1.2-orig/bin/linux-x86-32/sonar.sh sonarqube-5.1.2/bin/linux-x86-32/sonar.sh
---- sonarqube-5.1.2-orig/bin/linux-x86-32/sonar.sh	2015-09-13 23:03:04.182017635 +0800
-+++ sonarqube-5.1.2/bin/linux-x86-32/sonar.sh	2015-09-13 23:16:08.789707533 +0800
+diff -urN sonarqube-5.3/bin/linux-x86-32/sonar.sh sonarqube-5.3-mod/bin/linux-x86-32/sonar.sh
+--- sonarqube-5.3/bin/linux-x86-32/sonar.sh	2016-02-23 23:05:37.000000000 +0800
++++ sonarqube-5.3-mod/bin/linux-x86-32/sonar.sh	2016-02-23 23:14:04.000000000 +0800
 @@ -22,15 +22,15 @@
  APP_LONG_NAME="${DEF_APP_LONG_NAME}"
  
@@ -36,9 +36,9 @@ diff -urN sonarqube-5.1.2-orig/bin/linux-x86-32/sonar.sh sonarqube-5.1.2/bin/lin
 -exit 0
 \ No newline at end of file
 +exit 0
-diff -urN sonarqube-5.1.2-orig/bin/linux-x86-64/sonar.sh sonarqube-5.1.2/bin/linux-x86-64/sonar.sh
---- sonarqube-5.1.2-orig/bin/linux-x86-64/sonar.sh	2015-09-13 23:03:04.184017635 +0800
-+++ sonarqube-5.1.2/bin/linux-x86-64/sonar.sh	2015-09-13 23:14:13.805698270 +0800
+diff -urN sonarqube-5.3/bin/linux-x86-64/sonar.sh sonarqube-5.3-mod/bin/linux-x86-64/sonar.sh
+--- sonarqube-5.3/bin/linux-x86-64/sonar.sh	2016-02-23 23:05:37.000000000 +0800
++++ sonarqube-5.3-mod/bin/linux-x86-64/sonar.sh	2016-02-23 23:15:39.000000000 +0800
 @@ -22,15 +22,15 @@
  APP_LONG_NAME="${DEF_APP_LONG_NAME}"
  
@@ -74,9 +74,9 @@ diff -urN sonarqube-5.1.2-orig/bin/linux-x86-64/sonar.sh sonarqube-5.1.2/bin/lin
 -exit 0
 \ No newline at end of file
 +exit 0
-diff -urN sonarqube-5.1.2-orig/conf/wrapper.conf sonarqube-5.1.2/conf/wrapper.conf
---- sonarqube-5.1.2-orig/conf/wrapper.conf	2015-09-13 23:03:04.187017635 +0800
-+++ sonarqube-5.1.2/conf/wrapper.conf	2015-09-13 23:28:09.459884102 +0800
+diff -urN sonarqube-5.3/conf/wrapper.conf sonarqube-5.3-mod/conf/wrapper.conf
+--- sonarqube-5.3/conf/wrapper.conf	2016-02-23 23:05:37.000000000 +0800
++++ sonarqube-5.3-mod/conf/wrapper.conf	2016-02-23 23:10:53.000000000 +0800
 @@ -8,16 +8,21 @@
  # DO NOT EDIT THE FOLLOWING SECTIONS
  #
@@ -93,7 +93,7 @@ diff -urN sonarqube-5.1.2-orig/conf/wrapper.conf sonarqube-5.1.2/conf/wrapper.co
 -wrapper.java.library.path.1=./lib
 +wrapper.java.classpath.1=%SONAR_HOME%/lib/jsw/*.jar
 +wrapper.java.classpath.2=%SONAR_HOME%/lib/*.jar
-+wrapper.java.library.path.1=%SONAR_HOME%/bin/
++wrapper.java.library.path.1=%SONAR_HOME%/lib
  wrapper.app.parameter.1=org.sonar.application.App
 +wrapper.app.parameter.2=-Dsonar.path.home=%SONAR_HOME%
 +wrapper.app.parameter.3=-Dsonar.path.logs=/var/log/sonar
@@ -101,9 +101,9 @@ diff -urN sonarqube-5.1.2-orig/conf/wrapper.conf sonarqube-5.1.2/conf/wrapper.co
 +wrapper.app.parameter.5=-Dsonar.path.log=/var/log/sonar
 +wrapper.app.parameter.6=-Dsonar.path.temp=/var/lib/sonar/temp
  wrapper.java.initmemory=3
- # Xmx can't be set to a lower value because of compatibility with Java 6
- wrapper.java.maxmemory=32
-@@ -28,7 +33,7 @@
+ wrapper.java.maxmemory=3
+ 
+@@ -27,7 +32,7 @@
  
  wrapper.console.format=PM
  wrapper.console.loglevel=INFO
@@ -112,7 +112,7 @@ diff -urN sonarqube-5.1.2-orig/conf/wrapper.conf sonarqube-5.1.2/conf/wrapper.co
  wrapper.logfile.format=M
  wrapper.logfile.loglevel=INFO
  
-@@ -86,4 +91,4 @@
+@@ -85,4 +90,4 @@
  wrapper.disable_restarts=TRUE
  wrapper.ping.timeout=0
  wrapper.shutdown.timeout=3000

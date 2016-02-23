@@ -6,6 +6,7 @@ function setup_rpmbuild_env() {
     # setup rpmbuild macros by copying /tmp/macros.rpmbuild
     # which is provisioned by the file provisioner, to /etc/rpm
     mkdir -p /home/devel/rpmbuild/{SOURCES,SPECS,SRPMS,RPMS,BUILD}
+    chown -R devel:devel /home/devel/rpmbuild
     mv /tmp/macros.rpmbuild /etc/rpm
     chmod 664 /etc/rpm/macros.rpmbuild
     chown root:root /etc/rpm/macros.rpmbuild

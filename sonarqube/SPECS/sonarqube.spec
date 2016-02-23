@@ -8,7 +8,7 @@
 %undefine _missing_build_ids_terminate_build
 
 Name:    sonarqube
-Version: 4.5.1
+Version: 5.3
 Release: 1%{?dist}
 Summary: Open source platform for continuous inspection of code quality.
 Group: System Environment/Daemons
