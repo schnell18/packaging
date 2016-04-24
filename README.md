@@ -10,6 +10,8 @@ vmbot github project][1]
 RPM spec catalog
 ================
 
+* zookeeper: spec file to install zookeeper out-of-box
+* sonarqube: spec file to install SonarQube out-of-box
 * fcgiwrap:  spec file to install and enable fcgiwrap as a systemd service
 * gitolite3: repack to remove the SVN dependency and use 'git' as hosting user
 * pure-fptd: repack to enable upload script and use upstream version 1.0.36
@@ -19,7 +21,6 @@ RPM spec catalog
 * cgit:      repack cgit 0.11.2(based on epel7), cut down docs for docker
 * bash-git-prompt: create RPM package for the nice-looking [bash-git-prompt][2]
 * redis:     upgrade to redis 2.8.17 based on the spec file from fedora project
-* sonarqube: spec file to install SonarQube out-of-box
 
 Regenerate the RPM
 ==================
@@ -28,7 +29,7 @@ directory and type command like:
 
     rpmbuild --rebuild <src_rpm_file>
 
-The generated RPM is located at ~/rpmbuild/RPMS/{x86\_64,i686}/.
+The generated RPM is located at ~/rpmbuild/RPMS/{x86\_64,i686,noarch}/.
 
 Issues
 ======
