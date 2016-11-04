@@ -1,0 +1,135 @@
+#!/bin/sh
+#
+# kafka Kafka Server
+#
+# chkconfig: - 80 05
+# description: Enable Kafka Server
+#
+
+### BEGIN INIT INFO
+# Provides:          kafka
+# Default-Start:
+# Default-Stop:
+# Required-Start:    $remote_fs $network
+# Required-Stop:     $remote_fs $network
+# Description:       kafka Server
+# Short-Description: Enable kafka  Server
+### END INIT INFO
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+prog="kafka"
+desc="kafka Server"
+
+[ -e /etc/sysconfig/$prog ] && . /etc/sysconfig/$prog
+
+lockfile="/var/lock/subsys/$prog"
+pidfile="/var/run/$prog.pid"
+
+KAFKAJARDIR="/var/lib/kafka/libs"
+KAFKACFGDIR="/var/lib/kafka/config"
+KAFKACFG="server.properties"
+KAFKACFG="$KAFKACFGDIR/$KAFKACFG"
+KAFKA_LOG_DIR="/var/log/kafka"
+
+if [ -z "$KAFKA_HEAP_OPTS" ]; then
+  KAFKA_HEAP_OPTS="-Xmx1024m"
+fi
+
+if [ -z "$KAFKA_JVM_PERFORMANCE_OPTS" ]; then
+  KAFKA_JVM_PERFORMANCE_OPTS="-server -XX:+UseG1GC -XX:MaxGCPauseMillis=20 -XX:InitiatingHeapOccupancyPercent=35 -XX:+DisableExplicitGC -Djava.awt.headless=true"
+fi
+
+if [ "x$KAFKA_LOG4J_OPTS" = "x" ]; then
+    export KAFKA_LOG4J_OPTS="-Dlog4j.configuration=file:$KAFKACFGDIR/log4j.properties"
+fi
+
+# JMX settings
+if [ -z "$KAFKA_JMX_OPTS" ]; then
+  KAFKA_JMX_OPTS="-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false  -Dcom.sun.management.jmxremote.ssl=false "
+fi
+
+# JMX port to use
+if [  $JMX_PORT ]; then
+  KAFKA_JMX_OPTS="$KAFKA_JMX_OPTS -Dcom.sun.management.jmxremote.port=$JMX_PORT "
+fi
+
+GC_FILE_SUFFIX='-gc.log'
+GC_LOG_FILE_NAME=''
+if [ "x$KAFKA_GC_LOG_ENABLED" = "xtrue" ]; then
+  GC_LOG_FILE_NAME=$prog$GC_FILE_SUFFIX
+  KAFKA_GC_LOG_OPTS="-Xloggc:$KAFKA_LOG_DIR/$GC_LOG_FILE_NAME -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps "
+fi
+
+JVMFLAGS="$JAVAFLAGS $KAFKA_HEAP_OPTS $KAFKA_JVM_PERFORMANCE_OPTS $KAFKA_LOG4J_OPTS $KAFKA_JMX_OPTS $KAFKA_GC_LOG_OPTS"
+MAINCLASS=kafka.Kafka
+
+for i in "$KAFKAJARDIR"/*.jar
+do
+    CLASSPATH="$CLASSPATH:$i"
+done
+
+
+cmd="java -Dkafka.logs.dir=${KAFKA_LOG_DIR} -cp ${CLASSPATH} ${JVMFLAGS} ${MAINCLASS} ${KAFKACFG} > $KAFKA_LOG_DIR/std.out 2>$KAFKA_LOG_DIR/std.err & echo \$! > ${pidfile}"
+
+
+start() {
+    echo -n $"Starting $desc ($prog): "
+    touch $pidfile && chown kafka $pidfile
+    daemon --user kafka --pidfile $pidfile "$cmd"
+    retval=$?
+    echo
+    [ $retval -eq 0 ] && touch $lockfile
+    return $retval
+}
+
+stop() {
+    echo -n $"Stopping $prog: "
+    killproc -p $pidfile  $prog
+    retval=$?
+    echo
+    [ $retval -eq 0 ] && rm -f $lockfile
+    return $retval
+}
+
+restart() {
+    stop
+    start
+}
+
+reload() {
+    restart
+}
+
+checkStatus(){
+  status -p $pidfile kafka
+  RETVAL=$?
+}
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    restart)
+        restart
+        ;;
+    reload)
+        reload
+        ;;
+    condrestart)
+        [ -e /var/lock/subsys/$prog ] && restart
+        RETVAL=$?
+        ;;
+    status)
+        checkStatus
+        ;;
+    *)
+        echo $"Usage: $0 {start|stop|restart|reload|condrestart|status}"
+        RETVAL=1
+esac
+
+exit $RETVAL

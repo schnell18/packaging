@@ -10,6 +10,7 @@ vmbot github project][1]
 RPM spec catalog
 ================
 
+* kafka:     spec file to install kafka out-of-box
 * zookeeper: spec file to install zookeeper out-of-box
 * sonarqube: spec file to install SonarQube out-of-box
 * fcgiwrap:  spec file to install and enable fcgiwrap as a systemd service
