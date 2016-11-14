@@ -2,7 +2,7 @@
 #
 # kafka Kafka Server
 #
-# chkconfig: - 80 05
+# chkconfig: - 85 04
 # description: Enable Kafka Server
 #
 
