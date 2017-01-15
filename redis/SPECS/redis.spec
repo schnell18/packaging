@@ -1,5 +1,5 @@
 Name:             redis
-Version:          2.8.17
+Version:          3.2.6
 Release:          1%{?dist}
 Summary:          An advanced key-value cache and in-memory database
 
@@ -35,7 +35,7 @@ auto-reconnection with partial resynchronization on net split.
 
 %prep
 %setup -q
-%patch0 -p0 -b .orig
+%patch0 -p1 -b .orig
 
 %build
 make %{?_smp_mflags} \
@@ -52,6 +52,7 @@ install -p -D -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
 install -p -D -m 755 %{SOURCE2} %{buildroot}%{_initrddir}/%{name}
 install -d -m 755 %{buildroot}%{_sysconfdir}/%{name}
 install -p -D -m 644 %{name}.conf %{buildroot}%{_sysconfdir}/%{name}/%{name}.conf
+install -d -m 755 %{buildroot}%{_localstatedir}/run/%{name}
 install -d -m 755 %{buildroot}%{_localstatedir}/lib/%{name}
 install -d -m 755 %{buildroot}%{_localstatedir}/log/%{name}
 
@@ -83,9 +84,10 @@ fi
 
 %files
 %defattr(-,root,root,-)
-%doc 00-RELEASENOTES BUGS CONTRIBUTING COPYING README MANIFESTO
+%doc 00-RELEASENOTES BUGS CONTRIBUTING COPYING README.md MANIFESTO
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
 %config(noreplace) %{_sysconfdir}/%{name}/%{name}.conf
+%dir %attr(0755, redis, root) %{_localstatedir}/run/%{name}
 %dir %attr(0755, redis, root) %{_localstatedir}/lib/%{name}
 %dir %attr(0755, redis, root) %{_localstatedir}/log/%{name}
 %{_bindir}/%{name}-*
@@ -93,6 +95,9 @@ fi
 %{_initrddir}/%{name}
 
 %changelog
+* Sun Jan 15 2017 Justin Zhang <schnell18@gmail.com> - 3.2.6-1
+- Update to redis 3.2.6
+
 * Tue Oct 28 2014 Justin Zhang <schnell18@gmail.com> - 2.8.17-1
 - Update to redis 2.8.17
 

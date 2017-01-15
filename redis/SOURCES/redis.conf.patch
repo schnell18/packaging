@@ -1,15 +1,25 @@
---- redis.conf.orig	2014-09-19 23:49:16.000000000 +0800
-+++ redis.conf	2014-10-28 22:07:41.748030953 +0800
-@@ -34,7 +34,7 @@
+diff -rU3 redis-3.2.6/redis.conf redis-3.2.6_rpm/redis.conf
+--- redis-3.2.6/redis.conf	2016-12-06 16:38:33.000000000 +0800
++++ redis-3.2.6_rpm/redis.conf	2017-01-15 23:55:16.870911901 +0800
+@@ -125,7 +125,7 @@
  
  # By default Redis does not run as a daemon. Use 'yes' if you need it.
  # Note that Redis will write a pid file in /var/run/redis.pid when daemonized.
 -daemonize no
 +daemonize yes
  
- # When running daemonized, Redis writes a pid file in /var/run/redis.pid by
- # default. You can specify a custom pid file location here.
-@@ -100,7 +100,7 @@
+ # If you run Redis from upstart or systemd, Redis can interact with your
+ # supervision tree. Options:
+@@ -147,7 +147,7 @@
+ #
+ # Creating a pid file is best effort: if Redis is not able to create it
+ # nothing bad happens, the server will start and run normally.
+-pidfile /var/run/redis_6379.pid
++pidfile /var/run/redis/redis.pid
+ 
+ # Specify the server verbosity level.
+ # This can be one of:
+@@ -160,7 +160,7 @@
  # Specify the log file name. Also the empty string can be used to force
  # Redis to log on the standard output. Note that if you use standard
  # output for logging but daemonize, logs will be sent to /dev/null
@@ -18,12 +28,12 @@
  
  # To enable logging to the system logger, just set 'syslog-enabled' to yes,
  # and optionally update the other syslog parameters to suit your needs.
-@@ -184,7 +184,7 @@
+@@ -244,7 +244,7 @@
  # The Append Only File will also be created inside this directory.
- # 
+ #
  # Note that you must specify a directory here, not a file name.
 -dir ./
-+dir /var/lib/redis/
++dir /var/lib/redis
  
  ################################# REPLICATION #################################
  
