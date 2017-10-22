@@ -22,6 +22,7 @@ RPM spec catalog
 * cgit:      repack cgit 0.11.2(based on epel7), cut down docs for docker
 * bash-git-prompt: create RPM package for the nice-looking [bash-git-prompt][2]
 * redis:     upgrade to redis 3.2.6 based on the spec file from fedora project
+* nicstat:   Make RPM package for nicstat -- a network monitoring tool
 
 Regenerate the RPM
 ==================
