@@ -1,6 +1,6 @@
 Summary: Kafka is a distributed publish/subscribe messaging system
 Name: kafka
-Version: 0.10.1.0
+Version: 1.0.0
 Release: 1%{?dist}
 Group: Applications/Internet
 License: Apache (v2)
